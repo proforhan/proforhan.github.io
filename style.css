@@ -218,14 +218,22 @@ p { margin: 0 0 1em; }
 /* ===== GitHub repos ===== */
 .repo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
 .repo-card {
-  background: var(--card); border: 1px solid var(--rule); border-radius: 12px;
+  background: var(--card); border: 1px solid var(--rule);
+  border-top: 4px solid var(--accent); border-radius: 12px;
   padding: 1.5rem; text-decoration: none; color: var(--ink); display: block;
-  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+  transition: transform 0.15s, box-shadow 0.15s;
 }
 .repo-card:hover {
-  transform: translateY(-2px); border-color: var(--accent);
-  box-shadow: 0 8px 24px rgba(31, 35, 40, 0.08);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 26px rgba(31, 35, 40, 0.12);
 }
+/* Cycle accent colors across the project cards */
+.repo-card:nth-child(3n+1) { border-top-color: var(--accent); }
+.repo-card:nth-child(3n+1) .repo-name { color: var(--accent); }
+.repo-card:nth-child(3n+2) { border-top-color: var(--coral); }
+.repo-card:nth-child(3n+2) .repo-name { color: var(--coral); }
+.repo-card:nth-child(3n+3) { border-top-color: var(--violet); }
+.repo-card:nth-child(3n+3) .repo-name { color: var(--violet); }
 .repo-name {
   font-family: var(--serif); font-weight: 700; font-size: 1.25rem;
   color: var(--accent); margin-bottom: 0.4rem;

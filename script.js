@@ -20,6 +20,12 @@ const LANG_COLORS = {
   "Jupyter Notebook": "#DA5B0B", R: "#198CE7", PowerShell: "#012456", TeX: "#3D6117",
 };
 
+// Friendly display titles for repos (keyed by GitHub repo name).
+const DISPLAY_NAMES = {
+  "orhans-morning-book": "Orhan's Morning Book",
+  "isochronic-maps": "World Isochronic Map",
+};
+
 // Projects that don't live under GITHUB_USER (e.g. joint work) — shown as matching cards.
 const MANUAL_PROJECTS = [
   {
@@ -63,12 +69,13 @@ async function loadRepos() {
       const updated = new Date(r.pushed_at).toLocaleDateString("en-US", {
         year: "numeric", month: "short", day: "numeric",
       });
+      const stars = r.stargazers_count >= 10 ? `<span>★ ${r.stargazers_count}</span>` : "";
       return projectCard(
-        r.name,
+        DISPLAY_NAMES[r.name] || r.name,
         r.description || "No description provided.",
         r.html_url,
         r.language,
-        `<span>★ ${r.stargazers_count}</span><span>Updated ${updated}</span>`
+        `${stars}<span>Updated ${updated}</span>`
       );
     });
 
