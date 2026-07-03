@@ -27,7 +27,9 @@ async function loadRepos() {
       `https://api.github.com/users/${GITHUB_USER}/repos?sort=updated&per_page=12`
     );
     if (!res.ok) throw new Error(`GitHub API returned ${res.status}`);
-    const repos = (await res.json()).filter((r) => !r.fork);
+    const repos = (await res.json()).filter(
+      (r) => !r.fork && r.name !== `${GITHUB_USER}.github.io`
+    );
 
     if (repos.length === 0) {
       grid.innerHTML = '<p class="repo-error">No public repositories yet.</p>';
