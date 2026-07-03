@@ -200,26 +200,6 @@ p { margin: 0 0 1em; }
 }
 .book-card .text-link { margin-top: auto; padding-top: 0.8rem; }
 
-/* ===== Featured project ===== */
-.featured-project {
-  position: relative; margin-bottom: 2rem; border-radius: 14px; overflow: hidden;
-  background: var(--card); border: 1px solid var(--rule);
-  box-shadow: 0 10px 30px rgba(28, 34, 48, 0.08);
-}
-.featured-project::before {
-  content: ""; position: absolute; top: 0; left: 0; bottom: 0; width: 6px;
-  background: var(--grad);
-}
-.fp-body { padding: 1.8rem 1.8rem 1.8rem 2.2rem; }
-.fp-tag {
-  display: inline-block; text-transform: uppercase; letter-spacing: 0.12em;
-  font-size: 0.72rem; font-weight: 700; color: var(--violet);
-  background: #ece7fb; padding: 0.3rem 0.8rem; border-radius: 99px; margin-bottom: 0.7rem;
-}
-.featured-project h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
-.fp-desc { color: var(--ink-soft); margin-bottom: 1.2rem; }
-.fp-actions { display: flex; align-items: center; gap: 1.3rem; flex-wrap: wrap; }
-
 /* ===== Morning Book subscribe ===== */
 .subscribe-card {
   display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
