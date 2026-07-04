@@ -29,12 +29,12 @@ const DISPLAY_NAMES = {
 // Projects that don't live under GITHUB_USER (e.g. joint work) — shown as matching cards.
 const MANUAL_PROJECTS = [
   {
-    name: "LLM Portfolio Battle",
+    name: "LLM Portfolio Battle (with Manasa Dontireddy)",
     description:
       "Four AI models — DeepSeek, Claude, ChatGPT, and Grok — each manage a $1,000 portfolio in a weekly battle against the S&P 500.",
     url: "https://manasareddy2417.github.io/LLM-performance-tracker/",
     language: "JavaScript",
-    metaRight: "<span>Live demo ↗</span><span>with Manasa Reddy</span>",
+    metaRight: "<span>Live demo ↗</span>",
   },
 ];
 
