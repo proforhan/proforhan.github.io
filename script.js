@@ -78,6 +78,7 @@ const ICON_MAP = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 const ICON_CHART = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><rect x="5" y="11" width="3" height="7" rx="1"/><rect x="10.5" y="7" width="3" height="11" rx="1"/><rect x="16" y="4" width="3" height="14" rx="1"/></svg>`;
 const ICON_STOCKS = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l3.5-4 3 2.2L21 6"/><path d="M16.5 6H21v4.5"/></svg>`;
 const ICON_DEFAULT = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 8.5 5.5 12 9 15.5M15 8.5 18.5 12 15 15.5"/></svg>`;
+const ICON_BANK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8h18z"/><path d="M4 21h16M5 21V10M9.5 21V10M14.5 21V10M19 21V10"/></svg>`;
 
 // Per-repo icon overrides (keyed by GitHub repo name).
 const REPO_ICONS = {
@@ -87,6 +88,15 @@ const REPO_ICONS = {
 
 // Projects that don't live under GITHUB_USER (e.g. joint work) — shown as matching cards.
 const MANUAL_PROJECTS = [
+  {
+    name: "Fed Chair — The Dual Mandate Game",
+    description:
+      "An interactive macro simulation: set the fed funds rate each quarter to steer inflation and unemployment through shocks and a drifting neutral rate. Can you survive 40 quarters?",
+    url: "fed-chair-game.html",
+    language: "",
+    metaRight: "<span>Play in browser ↗</span>",
+    icon: ICON_BANK,
+  },
   {
     name: "LLM Portfolio Battle (with Manasa Dontireddy)",
     description:
