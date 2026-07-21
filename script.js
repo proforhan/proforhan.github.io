@@ -17,7 +17,7 @@ links.addEventListener("click", (e) => {
 // Walmart Inflation Tracker chart.
 // In Google Sheets: File → Share → Publish to web → choose the chart →
 // Embed → copy the URL inside src="..." and paste it below (keep the quotes).
-const WALMART_CHART_URL = "";
+const WALMART_CHART_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQhdq30a-BoalCItw-ZlbBAHyrrx2US1Lu98C1HMhjFxOuRQVs7cEHi5qe24HvMx83zyEOPzpkRgyO1/pubchart?oid=271917230&format=interactive";
 
 // Morning Book newsletter (Buttondown). Create a free account at buttondown.com,
 // then put your username here (the part after buttondown.com/…). Leave "" to keep
