@@ -43,7 +43,8 @@
           </p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="#publications">View Publications</a>
-            <a class="btn btn-ghost" href="#projects">GitHub Projects</a>
+            <a class="btn btn-ghost" href="Orhan-Erdem-CV.pdf" target="_blank" rel="noopener">Download CV ↓</a>
+            <a class="btn btn-ghost" href="#projects">Projects</a>
           </div>
         </div>
         <img class="hero-photo" src="images/headshot.jpg" alt="Portrait of Orhan Erdem"
@@ -165,13 +166,25 @@
           the repository cards below update automatically from GitHub.
         </p>
 
+        <!-- Walmart Inflation Tracker — Google Sheets chart, auto-updating.
+             Hidden until WALMART_CHART_URL is set in script.js. -->
+        <figure id="walmart-tracker" class="data-card" hidden>
+          <figcaption class="data-card-head">
+            <h3>🛒 Walmart Inflation Tracker</h3>
+            <p>A fixed basket of groceries at a Walmart in Irving, Texas, tracked over time as a
+               real-world inflation gauge and compared with the official CPI — the same index
+               featured in Orhan's Morning Book. Updates automatically.</p>
+          </figcaption>
+          <div class="data-embed"><!-- iframe injected by script.js --></div>
+        </figure>
+
         <div class="subscribe-card">
           <div class="subscribe-text">
             <h3>☕ Orhan's Morning Book</h3>
             <p>A daily 7&nbsp;AM briefing — top news, a research radar, and a chart of the day,
                curated across AI, economics, finance, and medicine. Want it in your inbox?</p>
           </div>
-          <a class="btn btn-primary" href="mailto:orhanerdem@gmail.com?subject=Subscribe%20to%20Orhan's%20Morning%20Book&amp;body=Hi%20Orhan%2C%20please%20add%20me%20to%20your%20Morning%20Book.%20My%20name%20is%3A">Subscribe</a>
+          <a class="btn btn-primary" id="subscribe-cta" href="mailto:orhanerdem@gmail.com?subject=Subscribe%20to%20Orhan's%20Morning%20Book&amp;body=Hi%20Orhan%2C%20please%20add%20me%20to%20your%20Morning%20Book.%20My%20name%20is%3A">Subscribe</a>
         </div>
 
         <div id="repo-grid" class="repo-grid" aria-live="polite">
@@ -213,7 +226,7 @@
         <h2><span class="section-num">06</span> Contact</h2>
         <p class="contact-lede">For research collaboration, speaking, or media inquiries:</p>
         <div class="contact-links">
-          <a class="btn btn-primary" href="mailto:orhanerdem@gmail.com">orhanerdem@gmail.com</a>
+          <a class="btn btn-primary" id="contact-email" data-user="orhanerdem" data-domain="gmail.com">orhanerdem [at] gmail.com</a>
           <a class="btn btn-ghost" href="Orhan-Erdem-CV.pdf" target="_blank" rel="noopener">Download CV ↓</a>
           <a class="btn btn-ghost" href="https://github.com/proforhan" target="_blank" rel="noopener">GitHub</a>
           <a class="btn btn-ghost" href="https://www.linkedin.com/in/drorhanerdem" target="_blank" rel="noopener">LinkedIn</a>
