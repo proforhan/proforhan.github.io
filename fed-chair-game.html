@@ -36,15 +36,15 @@
   #turnBadge b{color:var(--text);}
   main{max-width:1150px; margin:0 auto; display:flex; flex-direction:column; gap:14px;}
 
-  /* stat cards */
-  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px;}
+  /* stat cards (compact — ~20% smaller) */
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(136px,1fr)); gap:10px;}
   .card{
-    background:var(--panel); border:1px solid var(--border); border-radius:12px;
-    padding:12px 16px;
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:10px 13px;
   }
-  .card .label{font-size:.75rem; text-transform:uppercase; letter-spacing:.8px; color:var(--muted);}
-  .card .value{font-size:1.7rem; font-weight:700; margin-top:2px; font-variant-numeric:tabular-nums;}
-  .card .sub{font-size:.78rem; color:var(--muted); margin-top:2px;}
+  .card .label{font-size:.66rem; text-transform:uppercase; letter-spacing:.7px; color:var(--muted);}
+  .card .value{font-size:1.35rem; font-weight:700; margin-top:2px; font-variant-numeric:tabular-nums;}
+  .card .sub{font-size:.68rem; color:var(--muted); margin-top:2px;}
   .up{color:var(--bad);} .down{color:var(--good);} .flat{color:var(--muted);}
   .card.score .value{color:var(--accent);}
 
@@ -59,8 +59,13 @@
     display:flex; align-items:center; justify-content:space-between; gap:14px;
     flex-wrap:wrap; margin-bottom:6px;
   }
-  .rate-pick{display:flex; align-items:center; gap:8px; font-weight:600; color:var(--muted); font-size:.9rem;}
-  .rate-pick select{font-size:1.05rem; font-weight:700; color:var(--text); padding:8px 12px; font-variant-numeric:tabular-nums;}
+  .rate-pick{display:flex; align-items:center; gap:6px; font-weight:600; color:var(--muted); font-size:.9rem;}
+  .rate-pick input[type=number]{
+    width:96px; font-size:1.1rem; font-weight:700; color:var(--text); background:var(--panel2);
+    border:1px solid var(--border); border-radius:8px; padding:8px 10px; font-variant-numeric:tabular-nums;
+  }
+  .rate-pick input[type=number]:hover{border-color:var(--accent);}
+  .rate-unit{font-weight:700; color:var(--muted);}
   .gamebar-actions{display:flex; gap:10px; flex-wrap:wrap;}
   #startBtn{
     background:var(--panel2); border:1px solid var(--border); color:var(--text);
@@ -86,16 +91,19 @@
   .tgt-row span{font-weight:700; font-variant-numeric:tabular-nums; min-width:52px; text-align:right;}
   .divider{border-top:1px solid var(--border); margin:2px 0;}
 
-  /* shock banner */
+  /* shock banner — always occupies the same space so the chart never jumps */
   .shock{
-    border-radius:12px; padding:12px 16px; font-size:.9rem; line-height:1.55;
-    border:1px solid #b45309; background:#2d2410; display:none;
+    border-radius:12px; padding:10px 16px; font-size:.9rem; line-height:1.5;
+    border:1px solid var(--border); background:var(--panel2);
+    min-height:66px; display:flex; flex-direction:column; justify-content:center;
   }
-  .shock.show{display:block; animation:flash .5s ease;}
+  .shock.warn{border-color:#b45309; background:#2d2410;}
   .shock.crisis{border-color:#9f1239; background:#2d1016;}
   .shock.good{border-color:#15803d; background:#102d1c;}
+  .shock.calm{color:var(--muted);}
+  .shock.show{animation:flash .5s ease;}
   .shock .impact{color:var(--muted); font-size:.83rem;}
-  @keyframes flash{from{transform:scale(.985); opacity:.3;} to{transform:scale(1); opacity:1;}}
+  @keyframes flash{from{transform:scale(.99); opacity:.45;} to{transform:scale(1); opacity:1;}}
 
   .log{
     background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:16px;
@@ -133,9 +141,23 @@
   .modal-box td:last-child{text-align:right; font-variant-numeric:tabular-nums; font-weight:600;}
   .modal-box button{background:var(--accent); border:none; color:#fff; font-weight:700; padding:11px 26px; border-radius:10px;}
 
-  details.howto{max-width:1150px; margin:0 auto 14px; color:var(--muted); font-size:.88rem;}
-  details.howto summary{cursor:pointer; color:var(--text);}
-  details.howto p{margin:8px 0 0; line-height:1.55; max-width:70ch;}
+  /* how-to popover in the header */
+  .howto{position:relative; font-size:.85rem;}
+  .howto summary{
+    cursor:pointer; color:var(--text); list-style:none; white-space:nowrap;
+    padding:7px 12px; border:1px solid var(--border); border-radius:8px; background:var(--panel2);
+  }
+  .howto summary::-webkit-details-marker{display:none;}
+  .howto summary:hover{border-color:var(--accent);}
+  .howto-panel{
+    position:absolute; top:calc(100% + 8px); right:0; width:min(640px,86vw); z-index:30;
+    background:var(--panel2); border:1px solid var(--border); border-radius:12px;
+    padding:14px 16px; box-shadow:0 14px 34px rgba(0,0,0,.45); color:var(--muted); text-align:left;
+  }
+  .howto-panel p{margin:0 0 10px; line-height:1.55;}
+  .howto-panel p:last-child{margin-bottom:0;}
+  .howto-panel b{color:var(--text);}
+  @media(max-width:560px){ .howto-panel{position:fixed; left:12px; right:12px; width:auto;} }
 </style>
 </head>
 <body>
@@ -143,6 +165,26 @@
 <header>
   <h1>🏛️ Fed Chair <span>— The Dual Mandate Game</span></h1>
   <div class="spacer"></div>
+  <details class="howto">
+    <summary>❔ How to play</summary>
+    <div class="howto-panel">
+      <p>Each turn is one quarter. Set the federal funds rate, then advance. Your rate moves the
+      <b>real</b> rate relative to the <b>neutral rate (r*)</b>; a restrictive stance cools demand and an
+      easy one stimulates it — but with a <b>2–3 quarter lag</b>, so plan ahead. Demand moves unemployment
+      (Okun's law) and inflation (Phillips curve). Keep inflation near <b>2%</b> and unemployment near
+      <b>4%</b> for 40 quarters. Beware: if inflation strays far from your target for long, expectations
+      de-anchor and it becomes much harder to bring down.</p>
+      <p><b>The neutral rate r* drifts unpredictably</b> (shown next to the fed funds rate), and shocks —
+      oil, demand swings, crises — hit often. A rate that's right today won't be right for long, so
+      <b>set-and-forget will slowly steer the economy off course</b>. Watch the readouts each quarter and
+      keep adjusting.</p>
+      <p>Each game, the FOMC's <b>announced inflation target is chosen randomly</b> (shown in the
+      "Announced Target" card). Expectations anchor to that target, weighted by your credibility — so a
+      target above 2% means you must run tighter policy to hit the 2% Congress grades you against, while a
+      target below 2% eases that job. You can't change it; you only set the rate. You're fired at 12%
+      inflation, sustained deflation, or 12% unemployment.</p>
+    </div>
+  </details>
   <select id="scenSelect" title="Scenario">
     <option value="normal">Normal economy</option>
     <option value="seventies">1970s stagflation</option>
@@ -155,25 +197,6 @@
 <b>inflation to 2%</b> and unemployment to ≈4%, then press <b>Advance Quarter</b>. The rate is your
 only lever, and rate moves take 2–3 quarters to work. The FOMC's <b>announced inflation target is
 set by the game</b> (shown above) — expectations anchor to it, but Congress still grades you against 2%.</div>
-
-<details class="howto">
-  <summary>How to play</summary>
-  <p>Each turn is one quarter. Set the federal funds rate, then advance. Your rate moves the
-  <b>real</b> rate relative to the <b>neutral rate (r*)</b>; a restrictive stance cools demand and an
-  easy one stimulates it — but with a <b>2–3 quarter lag</b>, so plan ahead. Demand moves unemployment
-  (Okun's law) and inflation (Phillips curve). Keep inflation near <b>2%</b> and unemployment near
-  <b>4%</b> for 40 quarters. Beware: if inflation strays far from your target for long, expectations
-  de-anchor and it becomes much harder to bring down.</p>
-  <p><b>The neutral rate r* drifts unpredictably</b> (shown next to the fed funds rate), and shocks —
-  oil, demand swings, crises — hit often. A rate that's right today won't be right for long, so
-  <b>set-and-forget will slowly steer the economy off course</b>. Watch the readouts each quarter and
-  keep adjusting.</p>
-  <p>Each game, the FOMC's <b>announced inflation target is chosen randomly</b> (shown in the
-  "Announced Target" card). Expectations anchor to that target, weighted by your credibility — so a
-  target above 2% means you must run tighter policy to hit the 2% Congress grades you against, while a
-  target below 2% eases that job. You can't change it; you only set the rate. You're fired at 12%
-  inflation, sustained deflation, or 12% unemployment.</p>
-</details>
 
 <main>
   <section class="stats">
@@ -189,8 +212,9 @@ set by the game</b> (shown above) — expectations anchor to it, but Congress st
 
   <section class="chart-panel">
     <div class="gamebar">
-      <label class="rate-pick" for="rateSelect">Policy rate
-        <select id="rateSelect"></select>
+      <label class="rate-pick" for="rateInput">Policy rate
+        <input type="number" id="rateInput" min="0" max="20" step="0.25" value="3.5" inputmode="decimal">
+        <span class="rate-unit">%</span>
       </label>
       <div class="gamebar-actions">
         <button id="startBtn">⟳ Start the Game</button>
@@ -338,8 +362,9 @@ function newGame(){
     pendS:{}, pendD:{},           // queued supply/demand shocks by quarter
     hist:[{q:0, rate:c.i0, inf:c.pi0, un:c.u0, gap:c.y0, gdp:2.0, tgt:target, rstar:P.RSTAR, events:[]}],
   };
-  $('rateSelect').value = String(c.i0);
-  $('shockBanner').className = 'shock';
+  $('rateInput').value = c.i0;
+  $('shockBanner').className = 'shock calm';
+  $('shockBanner').textContent = 'No shock this quarter — calm seas. Mind the drifting neutral rate.';
   $('logBody').innerHTML =
     `<div class="entry"><span class="qtag">Briefing</span> — ${c.blurb}
      Starting conditions: inflation ${fmt(c.pi0)}%, unemployment ${fmt(c.u0)}%, fed funds ${fmt(c.i0,2)}%.</div>`;
@@ -359,7 +384,7 @@ function advance(){
   if(!S || S.over) return;
   const c = SCEN[S.scen];
   const prev = last(S.hist);
-  const rate = Math.min(20, Math.max(0, Math.round(parseFloat($('rateSelect').value)/0.25)*0.25));
+  const rate = Math.min(20, Math.max(0, Math.round((parseFloat($('rateInput').value)||0)/0.25)*0.25));
   S.q++;
   const q = S.q;
 
@@ -444,18 +469,23 @@ function stanceLabel(realGap){
   return 'strongly accommodative';
 }
 
-// Prominent banner making the current quarter's shock — and its quantified
-// model impact — explicit to the player. Hidden in shock-free quarters.
+// Banner making the current quarter's shock — and its quantified model
+// impact — explicit. The box is ALWAYS shown (a calm state in shock-free
+// quarters) so the chart below never jumps up and down.
 function showShockBanner(evs){
   const el = $('shockBanner');
-  if(!evs.length){ el.className = 'shock'; el.innerHTML = ''; return; }
+  if(!evs.length){
+    el.className = 'shock calm';
+    el.textContent = 'No shock this quarter — calm seas. Mind the drifting neutral rate.';
+    return;
+  }
   const e = evs[0], ev = EVENTS[e.type];
   const imp = arr => arr.filter(v=>v).map(v=>(v>0?'+':'')+v.toFixed(1)).join(', ');
   const parts = [];
   if(ev.supply.some(v=>v)) parts.push(`inflation impulse ${imp(ev.supply)}pp`);
   if(ev.demand.some(v=>v)) parts.push(`demand impulse ${imp(ev.demand)}pp of GDP`);
-  el.className = `shock show ${ev.cls}`;
-  el.innerHTML = `<b>${ev.icon} SHOCK — ${ev.name}.</b> ${e.msg}<br>
+  el.className = `shock show ${ev.cls || 'warn'}`;
+  el.innerHTML = `<div><b>${ev.icon} SHOCK — ${ev.name}.</b> ${e.msg}</div>
     <span class="impact">Model impact, starting this quarter: ${parts.join(' · ')} (fading over ${Math.max(ev.supply.filter(v=>v).length, ev.demand.filter(v=>v).length)} quarters).</span>`;
 }
 
@@ -561,7 +591,7 @@ function render(){
 function updateStanceNote(){
   if(!S) return;
   const cur = last(S.hist);
-  const r = parseFloat($('rateSelect').value);
+  const r = parseFloat($('rateInput').value) || 0;
   const rstar = cur.rstar ?? P.RSTAR;
   const realGap = (r - cur.inf) - rstar;
   const d = r - cur.rate;
@@ -623,17 +653,10 @@ function drawChart(){
 }
 
 // ---------- wiring ----------
-// Populate the policy-rate dropdown (0–20% in 25bp steps).
-(function buildRateOptions(){
-  let html = '';
-  for(let k=0; k<=80; k++){ const n = k*0.25; html += `<option value="${n}">${n.toFixed(2)}%</option>`; }
-  $('rateSelect').innerHTML = html;
-})();
-
 $('startBtn').addEventListener('click', newGame);
 $('advanceBtn').addEventListener('click', advance);
 $('scenSelect').addEventListener('change', newGame);
-$('rateSelect').addEventListener('change', updateStanceNote);
+$('rateInput').addEventListener('input', updateStanceNote);
 window.addEventListener('resize', ()=>{ if(S) drawChart(); });
 document.addEventListener('keydown', e=>{ if(e.key==='Enter' && !$('modal').classList.contains('show')) advance(); });
 
