@@ -79,6 +79,7 @@ const ICON_CHART = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" s
 const ICON_STOCKS = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l3.5-4 3 2.2L21 6"/><path d="M16.5 6H21v4.5"/></svg>`;
 const ICON_DEFAULT = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 8.5 5.5 12 9 15.5M15 8.5 18.5 12 15 15.5"/></svg>`;
 const ICON_BANK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 8h18z"/><path d="M4 21h16M5 21V10M9.5 21V10M14.5 21V10M19 21V10"/></svg>`;
+const ICON_CART = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3h2l2.2 12.2a1.5 1.5 0 0 0 1.5 1.3h8.6a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6"/><circle cx="9" cy="20" r="1.2"/><circle cx="17" cy="20" r="1.2"/></svg>`;
 
 // Per-repo icon overrides (keyed by GitHub repo name).
 const REPO_ICONS = {
@@ -106,6 +107,15 @@ const MANUAL_PROJECTS = [
     metaRight: "<span>Live demo ↗</span>",
     icon: ICON_STOCKS,
   },
+  {
+    name: "Walmart Inflation Tracker",
+    description:
+      "A fixed grocery basket at a Walmart in Irving, Texas, tracked over time as a real-world inflation gauge versus the official CPI — the index behind Orhan's Morning Book.",
+    url: "#walmart",
+    language: "",
+    metaRight: "<span>View the tracker ↓</span>",
+    icon: ICON_CART,
+  },
 ];
 
 function projectCard(name, description, url, language, metaRight, icon) {
@@ -113,8 +123,10 @@ function projectCard(name, description, url, language, metaRight, icon) {
   const lang = language
     ? `<span><span class="lang-dot" style="background:${color}"></span>${language}</span>`
     : "";
+  // In-page anchors (e.g. #walmart) scroll on this page; everything else opens a new tab.
+  const target = url.startsWith("#") ? "" : ` target="_blank" rel="noopener"`;
   return `
-    <a class="repo-card" href="${url}" target="_blank" rel="noopener">
+    <a class="repo-card" href="${url}"${target}>
       <div class="repo-head">
         <span class="repo-icon">${icon || ICON_DEFAULT}</span>
         <div class="repo-name">${name}</div>
