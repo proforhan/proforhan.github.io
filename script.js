@@ -48,7 +48,13 @@ if (subscribeEl && BUTTONDOWN_USER) {
   form.innerHTML =
     `<input type="email" name="email" placeholder="you@example.com" aria-label="Email address" required />
      <button type="submit" class="btn btn-primary">Subscribe</button>`;
-  subscribeEl.replaceWith(form);
+  const note = document.createElement("p");
+  note.className = "subscribe-note";
+  note.textContent = "You’ll get a confirmation email — check your inbox to confirm.";
+  const wrap = document.createElement("div");
+  wrap.className = "subscribe-cta-wrap";
+  wrap.append(form, note);
+  subscribeEl.replaceWith(wrap);
 }
 
 // Assemble the contact email at runtime so scrapers don't see a raw mailto.
