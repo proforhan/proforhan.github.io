@@ -54,26 +54,26 @@
   .chip{display:inline-block; width:22px; height:4px; border-radius:2px; margin-right:6px; vertical-align:middle;}
   canvas{width:100%; height:300px; display:block;}
 
-  /* bottom row */
-  .bottom{display:grid; grid-template-columns:330px 1fr; gap:14px; align-items:start;}
-  @media(max-width:820px){ .bottom{grid-template-columns:1fr;} }
-  .controls{
-    background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:16px;
-    display:flex; flex-direction:column; gap:12px;
+  /* game control bar (top of chart) */
+  .gamebar{
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    flex-wrap:wrap; margin-bottom:6px;
   }
-  .controls h2,.log h2{font-size:.85rem; text-transform:uppercase; letter-spacing:.8px; color:var(--muted);}
-  .rate-display{font-size:2rem; font-weight:700; text-align:center; font-variant-numeric:tabular-nums;}
-  .rate-display small{font-size:1rem; color:var(--muted); font-weight:400;}
-  input[type=range]{width:100%; accent-color:var(--rate); cursor:pointer;}
-  .quick{display:flex; gap:6px; justify-content:center;}
-  .quick button{padding:6px 10px; font-size:.85rem;}
-  #advanceBtn,#advanceBtnTop{
-    background:var(--accent); border:none; color:#fff; font-weight:700; font-size:1.05rem;
-    padding:12px; border-radius:10px;
+  .rate-pick{display:flex; align-items:center; gap:8px; font-weight:600; color:var(--muted); font-size:.9rem;}
+  .rate-pick select{font-size:1.05rem; font-weight:700; color:var(--text); padding:8px 12px; font-variant-numeric:tabular-nums;}
+  .gamebar-actions{display:flex; gap:10px; flex-wrap:wrap;}
+  #startBtn{
+    background:var(--panel2); border:1px solid var(--border); color:var(--text);
+    font-weight:700; font-size:1rem; padding:10px 16px; border-radius:10px;
   }
-  #advanceBtnTop{font-size:.95rem; padding:8px 16px;}
-  #advanceBtn:hover,#advanceBtnTop:hover{filter:brightness(1.12);}
-  #advanceBtn:disabled,#advanceBtnTop:disabled{opacity:.4; cursor:not-allowed;}
+  #startBtn:hover{border-color:var(--accent);}
+  #advanceBtn{
+    background:var(--accent); border:none; color:#fff; font-weight:700; font-size:1rem;
+    padding:10px 18px; border-radius:10px;
+  }
+  #advanceBtn:hover{filter:brightness(1.12);}
+  #advanceBtn:disabled{opacity:.4; cursor:not-allowed;}
+  .log h2{font-size:.85rem; text-transform:uppercase; letter-spacing:.8px; color:var(--muted);}
   .mission{
     max-width:1150px; margin:0 auto 12px; font-size:.88rem; line-height:1.5; color:var(--muted);
     background:var(--panel); border:1px solid var(--border); border-left:3px solid var(--accent);
@@ -148,15 +148,13 @@
     <option value="seventies">1970s stagflation</option>
     <option value="crisis08">2008-style crisis</option>
   </select>
-  <button id="newGameBtn">New Game</button>
   <div id="turnBadge">Q <b id="turnNum">0</b> / 40</div>
-  <button id="advanceBtnTop">▶ Play — Advance Quarter</button>
 </header>
 
-<div class="mission">🎯 <b>Your job:</b> each quarter, set the federal funds rate to steer
-<b>inflation to your target (2%)</b> and unemployment to ≈4%, then press <b>Advance Quarter</b>.
-Rate moves take 2–3 quarters to work. You may also announce a different inflation target (0–5%)
-in the policy panel below — but Congress grades you against 2%.</div>
+<div class="mission">🎯 <b>Your job:</b> each quarter, pick the <b>federal funds rate</b> to steer
+<b>inflation to 2%</b> and unemployment to ≈4%, then press <b>Advance Quarter</b>. The rate is your
+only lever, and rate moves take 2–3 quarters to work. The FOMC's <b>announced inflation target is
+set by the game</b> (shown above) — expectations anchor to it, but Congress still grades you against 2%.</div>
 
 <details class="howto">
   <summary>How to play</summary>
@@ -170,11 +168,11 @@ in the policy panel below — but Congress grades you against 2%.</div>
   oil, demand swings, crises — hit often. A rate that's right today won't be right for long, so
   <b>set-and-forget will slowly steer the economy off course</b>. Watch the readouts each quarter and
   keep adjusting.</p>
-  <p>You may also <b>announce your own inflation target (0–5%)</b>. Expectations anchor to whatever
-  you announce, weighted by your credibility — a higher announced target makes disinflation less
-  painful. But re-announcing costs credibility (markets punish moving goalposts), and <b>Congress
-  grades you against 2% regardless</b> of what you announce. You're fired at 12% inflation,
-  sustained deflation, or 12% unemployment.</p>
+  <p>Each game, the FOMC's <b>announced inflation target is chosen randomly</b> (shown in the
+  "Announced Target" card). Expectations anchor to that target, weighted by your credibility — so a
+  target above 2% means you must run tighter policy to hit the 2% Congress grades you against, while a
+  target below 2% eases that job. You can't change it; you only set the rate. You're fired at 12%
+  inflation, sustained deflation, or 12% unemployment.</p>
 </details>
 
 <main>
@@ -184,12 +182,22 @@ in the policy panel below — but Congress grades you against 2%.</div>
     <div class="card"><div class="label">Announced Target</div><div class="value" id="cTgt">–</div><div class="sub" id="cTgtSub"></div></div>
     <div class="card"><div class="label">Unemployment</div><div class="value" id="cUn">–</div><div class="sub" id="cUnSub">natural ≈ 4.0%</div></div>
     <div class="card"><div class="label">GDP Growth (ann.)</div><div class="value" id="cGdp">–</div><div class="sub" id="cGdpSub"></div></div>
-    <div class="card score"><div class="label">Dual Mandate Score</div><div class="value" id="cScore">–</div><div class="sub" id="cScoreSub"></div></div>
+    <div class="card score"><div class="label">Your Score</div><div class="value" id="cScore">–</div><div class="sub" id="cScoreSub"></div></div>
   </section>
 
   <section class="shock" id="shockBanner"></section>
 
   <section class="chart-panel">
+    <div class="gamebar">
+      <label class="rate-pick" for="rateSelect">Policy rate
+        <select id="rateSelect"></select>
+      </label>
+      <div class="gamebar-actions">
+        <button id="startBtn">⟳ Start the Game</button>
+        <button id="advanceBtn">Advance Quarter ▸</button>
+      </div>
+    </div>
+    <div class="stance-note" id="stanceNote"></div>
     <div class="legend">
       <span><span class="chip" style="background:var(--inf)"></span>Inflation</span>
       <span><span class="chip" style="background:var(--un)"></span>Unemployment</span>
@@ -200,31 +208,9 @@ in the policy panel below — but Congress grades you against 2%.</div>
     <canvas id="chart"></canvas>
   </section>
 
-  <section class="bottom">
-    <div class="controls">
-      <h2>Set Policy Rate</h2>
-      <div class="rate-display"><span id="rateVal">3.50</span><small>%</small></div>
-      <input type="range" id="rateSlider" min="0" max="20" step="0.25" value="3.5">
-      <div class="quick">
-        <button data-d="-0.5">−50bp</button>
-        <button data-d="-0.25">−25bp</button>
-        <button data-d="0.25">+25bp</button>
-        <button data-d="0.5">+50bp</button>
-      </div>
-      <div class="stance-note" id="stanceNote"></div>
-      <div class="divider"></div>
-      <h2>Announced Inflation Target</h2>
-      <div class="tgt-row">
-        <input type="range" id="tgtSlider" min="0" max="5" step="0.25" value="2">
-        <span id="tgtVal">2.00%</span>
-      </div>
-      <div class="stance-note" id="tgtNote"></div>
-      <button id="advanceBtn">Advance Quarter ▸</button>
-    </div>
-    <div class="log">
-      <h2>FOMC Minutes — why the numbers moved</h2>
-      <div id="logBody"></div>
-    </div>
+  <section class="log">
+    <h2>FOMC Minutes — why the numbers moved</h2>
+    <div id="logBody"></div>
   </section>
 </main>
 
@@ -258,7 +244,9 @@ in the policy panel below — but Congress grades you against 2%.</div>
         u_t = u_{t−1} + 0.65·[(u* − 0.5·y_t) − u_{t−1}] + noise
 
    3) PHILLIPS CURVE with (de-)anchorable expectations and an
-      ANNOUNCED TARGET τ chosen by the player (0–5%, default 2%):
+      ANNOUNCED TARGET τ set randomly by the game each game (~1.25–2.75%,
+      fixed for the run; the player cannot change it — the rate is the
+      only lever):
         π_t = πᵉ_t + 0.18·y_t + supply shocks + noise
         πᵉ_t = a·τ + (1−a)·mean(π, last 4 quarters)
       Expectations anchor to the ANNOUNCED target, weighted by
@@ -266,17 +254,13 @@ in the policy panel below — but Congress grades you against 2%.</div>
       floor 0.1): inflation becomes adaptive and persistent (the 1970s).
       If |π−τ| < 1pp, credibility slowly rebuilds (a +0.03/qtr, cap .95)
       — rebuilding is slower than erosion, so credibility is asymmetric.
+      The SCORE always measures π against the statutory 2%, so a drawn
+      target above 2 forces tighter policy (a graded miss vs an easier
+      employment path) while a target below 2 eases the job — the classic
+      time-inconsistency tradeoff, here handed to the player at random.
 
-      ANNOUNCEMENTS ARE NOT CHEAP TALK: re-announcing the target costs
-      credibility immediately (a −0.05 per pp of change — markets punish
-      moving goalposts). And the SCORE always measures π against the
-      statutory 2%: announcing 4% in a stagflation eases the sacrifice
-      ratio (expectations anchor at 4 instead of drifting with realized
-      inflation) but locks in a graded miss — the classic
-      time-inconsistency tradeoff.
-
-   SHOCKS: every quarter, small Gaussian noise on demand (sd .2) and
-   supply (sd .15); plus at most one discrete event, spread over 3
+   SHOCKS: every quarter, Gaussian noise on demand (sd .24) and
+   supply (sd .17); plus at most one discrete event, spread over 3
    quarters (oil shock, demand surge, financial crisis, favorable supply
    shock). Probabilities vary by scenario.
 
@@ -291,7 +275,6 @@ in the policy panel below — but Congress grades you against 2%.</div>
 
 const P = {
   TARGET: 2.0,   // statutory target — the score is always graded against this
-  REANN:  0.05,  // credibility cost per pp of target re-announcement
   USTAR:  4.0,   // natural rate of unemployment
   RSTAR:  1.0,   // neutral real interest rate (starting value — it drifts)
   RDRIFT: 0.33,  // per-quarter random-walk drift of the neutral rate r*
@@ -345,21 +328,23 @@ let S = null;
 function newGame(){
   const key = $('scenSelect').value;
   const c = SCEN[key];
+  // The FOMC's announced inflation target is chosen randomly each game (the
+  // player can't change it); expectations anchor to it, but the score is
+  // always graded against the statutory 2%.
+  const target = Math.round((1.25 + Math.random()*1.5) / 0.25) * 0.25;   // 1.25–2.75%
   S = {
     scen:key, q:0, over:false, won:false, deflCount:0,
-    anchor:c.anchor, lossSum:0, target:2.0, rstar:P.RSTAR,
+    anchor:c.anchor, lossSum:0, target, rstar:P.RSTAR,
     pendS:{}, pendD:{},           // queued supply/demand shocks by quarter
-    hist:[{q:0, rate:c.i0, inf:c.pi0, un:c.u0, gap:c.y0, gdp:2.0, tgt:2.0, rstar:P.RSTAR, events:[]}],
+    hist:[{q:0, rate:c.i0, inf:c.pi0, un:c.u0, gap:c.y0, gdp:2.0, tgt:target, rstar:P.RSTAR, events:[]}],
   };
-  $('rateSlider').value = c.i0;
-  $('tgtSlider').value = 2;
+  $('rateSelect').value = String(c.i0);
   $('shockBanner').className = 'shock';
   $('logBody').innerHTML =
     `<div class="entry"><span class="qtag">Briefing</span> — ${c.blurb}
      Starting conditions: inflation ${fmt(c.pi0)}%, unemployment ${fmt(c.u0)}%, fed funds ${fmt(c.i0,2)}%.</div>`;
   $('modal').classList.remove('show');
   $('advanceBtn').disabled = false;
-  $('advanceBtnTop').disabled = false;
   render();
 }
 
@@ -374,20 +359,9 @@ function advance(){
   if(!S || S.over) return;
   const c = SCEN[S.scen];
   const prev = last(S.hist);
-  const rate = Math.min(20, Math.max(0, Math.round(parseFloat($('rateSlider').value)/0.25)*0.25));
+  const rate = Math.min(20, Math.max(0, Math.round(parseFloat($('rateSelect').value)/0.25)*0.25));
   S.q++;
   const q = S.q;
-
-  // --- target announcement: expectations re-anchor to the new target at
-  //     once, but moving the goalposts costs credibility immediately ---
-  const tgt = Math.min(5, Math.max(0, Math.round(parseFloat($('tgtSlider').value)/0.25)*0.25));
-  let reann = null;
-  if(tgt !== S.target){
-    const cost = P.REANN * Math.abs(tgt - S.target);
-    reann = {from:S.target, to:tgt, cost, anchorBefore:S.anchor};
-    S.anchor = Math.max(0.1, S.anchor - cost);
-    S.target = tgt;
-  }
 
   // --- events: scripted first, else one random draw ---
   const evs = [];
@@ -450,7 +424,7 @@ function advance(){
 
   // --- shock banner + narrative log ---
   showShockBanner(evs);
-  logQuarter(prev, {rate,inf,un,gap,gdp}, {expTerm, demTerm, supShock, infNoise, evs, drag, expected, reann});
+  logQuarter(prev, {rate,inf,un,gap,gdp}, {expTerm, demTerm, supShock, infNoise, evs, drag, expected});
 
   // --- lose / win checks ---
   if(inf < -1) S.deflCount++; else S.deflCount = 0;
@@ -519,7 +493,6 @@ function logQuarter(prev, cur, d){
 function endGame(won, reason){
   S.over = true; S.won = won;
   $('advanceBtn').disabled = true;
-  $('advanceBtnTop').disabled = true;
   const h = S.hist.slice(1);
   const avg = a => a.reduce((x,y)=>x+y,0)/a.length;
   const avgLoss = S.lossSum / h.length;
@@ -545,7 +518,7 @@ function endGame(won, reason){
   $('mTitle').textContent = `${won?'Term complete':'Game over'} — “${title}”`;
   $('mVerdict').textContent = verdict;
   $('mTable').innerHTML = `
-    <tr><td>Dual Mandate Score</td><td>${score} / 100</td></tr>
+    <tr><td>Your Score</td><td>${score} / 100</td></tr>
     <tr><td>Quarters served</td><td>${h.length} / ${P.MAXQ}</td></tr>
     <tr><td>Average inflation</td><td>${fmt(avgInf)}%</td></tr>
     <tr><td>Average unemployment</td><td>${fmt(avgUn)}%</td></tr>
@@ -588,20 +561,13 @@ function render(){
 function updateStanceNote(){
   if(!S) return;
   const cur = last(S.hist);
-  const r = parseFloat($('rateSlider').value);
-  $('rateVal').textContent = fmt(r,2);
+  const r = parseFloat($('rateSelect').value);
   const rstar = cur.rstar ?? P.RSTAR;
   const realGap = (r - cur.inf) - rstar;
   const d = r - cur.rate;
   $('stanceNote').textContent =
     `${d===0?'Holding':'Moving '+(d>0?'+':'')+Math.round(d*100)+'bp to'} a ${stanceLabel(realGap)} stance ` +
     `(real rate ${fmt(r-cur.inf)}% vs neutral ${fmt(rstar)}%). Effects arrive over the next 2–3 quarters.`;
-  const t = parseFloat($('tgtSlider').value);
-  $('tgtVal').textContent = fmt(t,2)+'%';
-  $('tgtNote').textContent = t === S.target
-    ? `Holding the announced target at ${fmt(S.target)}%. Congress grades you against 2% regardless.`
-    : `Re-announcing ${fmt(S.target)}% → ${fmt(t)}% next quarter costs ` +
-      `${Math.round(P.REANN*Math.abs(t-S.target)*100)}pp of credibility. Congress still grades you against 2%.`;
 }
 
 function drawChart(){
@@ -657,19 +623,17 @@ function drawChart(){
 }
 
 // ---------- wiring ----------
+// Populate the policy-rate dropdown (0–20% in 25bp steps).
+(function buildRateOptions(){
+  let html = '';
+  for(let k=0; k<=80; k++){ const n = k*0.25; html += `<option value="${n}">${n.toFixed(2)}%</option>`; }
+  $('rateSelect').innerHTML = html;
+})();
+
+$('startBtn').addEventListener('click', newGame);
 $('advanceBtn').addEventListener('click', advance);
-$('advanceBtnTop').addEventListener('click', advance);
-$('newGameBtn').addEventListener('click', newGame);
 $('scenSelect').addEventListener('change', newGame);
-$('rateSlider').addEventListener('input', updateStanceNote);
-$('tgtSlider').addEventListener('input', updateStanceNote);
-document.querySelectorAll('.quick button').forEach(b=>{
-  b.addEventListener('click', ()=>{
-    const s = $('rateSlider');
-    s.value = Math.min(20, Math.max(0, parseFloat(s.value) + parseFloat(b.dataset.d)));
-    updateStanceNote();
-  });
-});
+$('rateSelect').addEventListener('change', updateStanceNote);
 window.addEventListener('resize', ()=>{ if(S) drawChart(); });
 document.addEventListener('keydown', e=>{ if(e.key==='Enter' && !$('modal').classList.contains('show')) advance(); });
 
