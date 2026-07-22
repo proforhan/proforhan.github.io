@@ -96,7 +96,7 @@ const REPO_ICONS = {
 // Projects that don't live under GITHUB_USER (e.g. joint work) — shown as matching cards.
 const MANUAL_PROJECTS = [
   {
-    name: "Fed Chair — The Dual Mandate Game",
+    name: "Fed Chair Game",
     description:
       "An interactive macro simulation: set the fed funds rate each quarter to steer inflation and unemployment through shocks and a drifting neutral rate. Can you survive 40 quarters?",
     url: "fed-chair-game.html",
@@ -105,7 +105,7 @@ const MANUAL_PROJECTS = [
     icon: ICON_BANK,
   },
   {
-    name: "LLM Portfolio Battle (with Manasa Dontireddy)",
+    name: "LLM Portfolio Battle (with M. Dontireddy)",
     description:
       "Four AI models — DeepSeek, Claude, ChatGPT, and Grok — each manage a $1,000 portfolio in a weekly battle against the S&P 500.",
     url: "https://manasareddy2417.github.io/LLM-performance-tracker/",
@@ -116,7 +116,7 @@ const MANUAL_PROJECTS = [
   {
     name: "Walmart Inflation Tracker",
     description:
-      "A fixed grocery basket at a Walmart in Irving, Texas, tracked over time as a real-world inflation gauge versus the official CPI — the index behind Orhan's Morning Book.",
+      "A fixed grocery basket at a Walmart in Irving, Texas, tracked over time as a real-world inflation gauge versus the official CPI.",
     url: "#walmart",
     language: "",
     metaRight: "<span>View the tracker ↓</span>",
