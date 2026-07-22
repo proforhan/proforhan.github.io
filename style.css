@@ -191,7 +191,7 @@ p { margin: 0 0 1em; }
 .pub-sublist { color: var(--ink-soft); display: grid; gap: 0.5rem; padding-left: 1.2rem; }
 
 /* ===== Books ===== */
-.book-grid { display: grid; grid-template-columns: repeat(3,1); gap: 1rem}
+.book-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem}
 .book-card {
   background: var(--card); border: 1px solid var(--rule); border-radius: 12px;
   padding: 1.2rem; display: flex; flex-direction: column;
