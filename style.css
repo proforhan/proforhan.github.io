@@ -196,16 +196,16 @@ p { margin: 0 0 1em; }
   background: var(--card); border: 1px solid var(--rule); border-radius: 12px;
   padding: 1.2rem; display: flex; flex-direction: column;
 }
-.book-card h3 { font-size: 1rem; }
+.book-card h3 { font-size: 0.95rem; }
 .book-card p:last-of-type { margin-bottom: 0; }
 .book-card { border-top: 4px solid var(--violet); transition: transform .15s, box-shadow .15s; }
 .book-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(28,34,48,.1); }
 .book-featured { border-top: 4px solid var(--coral); }
 .book-lang {
   text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.72rem;
-  font-weight: 600; color: var(--ink-soft); margin-bottom: 0.6rem;
+  font-weight: 600; color: var(--ink-soft); margin-bottom: 0.4rem;
 }
-.book-card .text-link { margin-top: auto; padding-top: 0.8rem; }
+.book-card .text-link { margin-top: auto; padding-top: 0.5rem; }
 
 /* ===== Games ===== */
 .game-grid { display: grid; gap: 1.25rem; }
