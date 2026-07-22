@@ -194,9 +194,9 @@ p { margin: 0 0 1em; }
 .book-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
 .book-card {
   background: var(--card); border: 1px solid var(--rule); border-radius: 12px;
-  padding: 1.6rem; display: flex; flex-direction: column;
+  padding: 1.2rem; display: flex; flex-direction: column;
 }
-.book-card h3 { font-size: 1.3rem; }
+.book-card h3 { font-size: 1rem; }
 .book-card p:last-of-type { margin-bottom: 0; }
 .book-card { border-top: 4px solid var(--violet); transition: transform .15s, box-shadow .15s; }
 .book-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(28,34,48,.1); }
