@@ -12,16 +12,22 @@
     font-size:15px;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
   body{
     background:var(--bg); color:var(--text);
     font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
-    min-height:100vh; padding:18px;
+    height:100vh; overflow:hidden; padding:12px;
+    display:flex; flex-direction:column;
+  }
+  @media (max-height:700px){
+    body{height:auto; min-height:100vh; overflow-y:auto;}
+    main{overflow:visible !important;}
   }
   header{
     display:flex; flex-wrap:wrap; align-items:center; gap:14px;
-    max-width:1150px; margin:0 auto 16px;
+    max-width:1150px; width:100%; margin:0 auto 8px; flex:none;
   }
-  header h1{font-size:1.35rem; font-weight:700; letter-spacing:.3px;}
+  header h1{font-size:1.25rem; font-weight:700; letter-spacing:.3px;}
   header h1 span{color:var(--accent);}
   .spacer{flex:1;}
   select,button{
@@ -34,30 +40,33 @@
     padding:7px 14px; font-weight:600; color:var(--muted);
   }
   #turnBadge b{color:var(--text);}
-  main{max-width:1150px; margin:0 auto; display:flex; flex-direction:column; gap:14px;}
+  main{
+    max-width:1150px; width:100%; margin:0 auto; display:flex; flex-direction:column; gap:8px;
+    flex:1; min-height:0; overflow:hidden;
+  }
 
-  /* stat cards (compact — ~20% smaller) */
-  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(136px,1fr)); gap:10px;}
+  /* stat cards (compact) */
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(136px,1fr)); gap:8px; flex:none;}
   .card{
     background:var(--panel); border:1px solid var(--border); border-radius:10px;
-    padding:10px 13px;
+    padding:7px 11px;
   }
-  .card .label{font-size:.66rem; text-transform:uppercase; letter-spacing:.7px; color:var(--muted);}
-  .card .value{font-size:1.35rem; font-weight:700; margin-top:2px; font-variant-numeric:tabular-nums;}
-  .card .sub{font-size:.68rem; color:var(--muted); margin-top:2px;}
+  .card .label{font-size:.64rem; text-transform:uppercase; letter-spacing:.7px; color:var(--muted);}
+  .card .value{font-size:1.15rem; font-weight:700; margin-top:1px; font-variant-numeric:tabular-nums;}
+  .card .sub{font-size:.66rem; color:var(--muted); margin-top:1px;}
   .up{color:var(--bad);} .down{color:var(--good);} .flat{color:var(--muted);}
   .card.score .value{color:var(--accent);}
 
   /* chart */
-  .chart-panel{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:14px 16px;}
-  .legend{display:flex; gap:18px; font-size:.82rem; color:var(--muted); margin-bottom:8px; flex-wrap:wrap;}
+  .chart-panel{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:9px 12px; flex:none;}
+  .legend{display:flex; gap:18px; font-size:.78rem; color:var(--muted); margin-bottom:5px; flex-wrap:wrap;}
   .chip{display:inline-block; width:22px; height:4px; border-radius:2px; margin-right:6px; vertical-align:middle;}
-  canvas{width:100%; height:300px; display:block;}
+  canvas{width:100%; height:180px; display:block;}
 
-  /* game control bar (top of chart) */
+  /* game control bar (top of chart) — left-aligned: Start, Policy rate, Advance */
   .gamebar{
-    display:flex; align-items:center; justify-content:space-between; gap:14px;
-    flex-wrap:wrap; margin-bottom:6px;
+    display:flex; align-items:center; gap:14px;
+    flex-wrap:wrap; margin-bottom:4px;
   }
   .rate-pick{display:flex; align-items:center; gap:6px; font-weight:600; color:var(--muted); font-size:.9rem;}
   .rate-pick input[type=number]{
@@ -78,43 +87,49 @@
   }
   #advanceBtn:hover{filter:brightness(1.12);}
   #advanceBtn:disabled{opacity:.4; cursor:not-allowed;}
-  .log h2{font-size:.85rem; text-transform:uppercase; letter-spacing:.8px; color:var(--muted);}
   .mission{
-    max-width:1150px; margin:0 auto 12px; font-size:.88rem; line-height:1.5; color:var(--muted);
+    max-width:1150px; width:100%; margin:0 auto; font-size:.84rem; line-height:1.4; color:var(--muted);
     background:var(--panel); border:1px solid var(--border); border-left:3px solid var(--accent);
-    border-radius:10px; padding:10px 14px;
+    border-radius:10px; padding:7px 12px; flex:none;
   }
   .mission b{color:var(--text);}
-  .stance-note{font-size:.82rem; color:var(--muted); text-align:center; min-height:2.4em;}
+  .stance-note{font-size:.8rem; color:var(--muted); text-align:center; min-height:1.6em;}
   .tgt-row{display:flex; align-items:center; gap:12px;}
   .tgt-row input{flex:1; accent-color:#e6edf7;}
   .tgt-row span{font-weight:700; font-variant-numeric:tabular-nums; min-width:52px; text-align:right;}
   .divider{border-top:1px solid var(--border); margin:2px 0;}
 
-  /* shock banner — always occupies the same space so the chart never jumps */
+  /* log panel — shock strip is attached to the top as its header, entries scroll below */
+  .log{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    flex:1 1 auto; min-height:60px; overflow:hidden; display:flex; flex-direction:column;
+  }
+  .log h2{
+    font-size:.82rem; text-transform:uppercase; letter-spacing:.8px; color:var(--muted);
+    margin:8px 14px 4px; flex:none;
+  }
+
+  /* shock strip — always occupies the same space so the layout never jumps */
   .shock{
-    border-radius:12px; padding:10px 16px; font-size:.9rem; line-height:1.5;
-    border:1px solid var(--border); background:var(--panel2);
-    min-height:66px; display:flex; flex-direction:column; justify-content:center;
+    padding:6px 14px; font-size:.83rem; line-height:1.35;
+    border-bottom:1px solid var(--border); background:var(--panel2);
+    min-height:38px; display:flex; flex-direction:column; justify-content:center; flex:none;
   }
   .shock.warn{border-color:#b45309; background:#2d2410;}
   .shock.crisis{border-color:#9f1239; background:#2d1016;}
   .shock.good{border-color:#15803d; background:#102d1c;}
   .shock.calm{color:var(--muted);}
   .shock.show{animation:flash .5s ease;}
-  .shock .impact{color:var(--muted); font-size:.83rem;}
   @keyframes flash{from{transform:scale(.99); opacity:.45;} to{transform:scale(1); opacity:1;}}
 
-  .log{
-    background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:16px;
-    max-height:430px; overflow-y:auto;
-  }
+  .log-body{flex:1 1 auto; overflow-y:auto; padding:0 14px 10px;}
   .entry{
-    border-bottom:1px solid var(--border); padding:12px 0; font-size:.88rem; line-height:1.5;
+    border-bottom:1px solid var(--border); padding:7px 0; font-size:.85rem; line-height:1.4;
   }
-  .entry:first-of-type{padding-top:8px;}
+  .entry:first-of-type{padding-top:4px;}
   .entry .qtag{font-weight:700; color:var(--accent);}
-  .entry ul{margin:4px 0 4px 18px; color:var(--muted);}
+  .entry .nums{margin:3px 0; font-variant-numeric:tabular-nums;}
+  .entry .why{color:var(--muted); font-size:.8rem;}
   .entry .event{
     display:inline-block; background:#3b2f14; border:1px solid #7a5c1e; color:#fbbf24;
     border-radius:6px; padding:2px 8px; font-size:.8rem; margin:3px 4px 3px 0;
@@ -193,10 +208,7 @@
   <div id="turnBadge">Q <b id="turnNum">0</b> / 40</div>
 </header>
 
-<div class="mission">🎯 <b>Your job:</b> each quarter, pick the <b>federal funds rate</b> to steer
-<b>inflation to 2%</b> and unemployment to ≈4%, then press <b>Advance Quarter</b>. The rate is your
-only lever, and rate moves take 2–3 quarters to work. The FOMC's <b>announced inflation target is
-set by the game</b> (shown above) — expectations anchor to it, but Congress still grades you against 2%.</div>
+<div class="mission">🎯 <b>Your job:</b> steer inflation to 2% and unemployment to ≈4% using the <b>federal funds rate</b> — moves take 2–3 quarters to work.</div>
 
 <main>
   <section class="stats">
@@ -208,16 +220,14 @@ set by the game</b> (shown above) — expectations anchor to it, but Congress st
     <div class="card score"><div class="label">Your Score</div><div class="value" id="cScore">–</div><div class="sub" id="cScoreSub"></div></div>
   </section>
 
-  <section class="shock" id="shockBanner"></section>
-
   <section class="chart-panel">
     <div class="gamebar">
-      <label class="rate-pick" for="rateInput">Policy rate
-        <input type="number" id="rateInput" min="0" max="20" step="0.25" value="3.5" inputmode="decimal">
-        <span class="rate-unit">%</span>
-      </label>
       <div class="gamebar-actions">
         <button id="startBtn">⟳ Start the Game</button>
+        <label class="rate-pick" for="rateInput">Policy rate
+          <input type="number" id="rateInput" min="0" max="20" step="0.25" value="3.5" inputmode="decimal">
+          <span class="rate-unit">%</span>
+        </label>
         <button id="advanceBtn">Advance Quarter ▸</button>
       </div>
     </div>
@@ -233,8 +243,9 @@ set by the game</b> (shown above) — expectations anchor to it, but Congress st
   </section>
 
   <section class="log">
+    <div class="shock" id="shockBanner"></div>
     <h2>FOMC Minutes — why the numbers moved</h2>
-    <div id="logBody"></div>
+    <div id="logBody" class="log-body"></div>
   </section>
 </main>
 
@@ -364,7 +375,7 @@ function newGame(){
   };
   $('rateInput').value = c.i0;
   $('shockBanner').className = 'shock calm';
-  $('shockBanner').textContent = 'No shock this quarter — calm seas. Mind the drifting neutral rate.';
+  $('shockBanner').textContent = 'No shock this quarter — calm seas.';
   $('logBody').innerHTML =
     `<div class="entry"><span class="qtag">Briefing</span> — ${c.blurb}
      Starting conditions: inflation ${fmt(c.pi0)}%, unemployment ${fmt(c.u0)}%, fed funds ${fmt(c.i0,2)}%.</div>`;
@@ -476,17 +487,23 @@ function showShockBanner(evs){
   const el = $('shockBanner');
   if(!evs.length){
     el.className = 'shock calm';
-    el.textContent = 'No shock this quarter — calm seas. Mind the drifting neutral rate.';
+    el.textContent = 'No shock this quarter — calm seas.';
     return;
   }
   const e = evs[0], ev = EVENTS[e.type];
-  const imp = arr => arr.filter(v=>v).map(v=>(v>0?'+':'')+v.toFixed(1)).join(', ');
-  const parts = [];
-  if(ev.supply.some(v=>v)) parts.push(`inflation impulse ${imp(ev.supply)}pp`);
-  if(ev.demand.some(v=>v)) parts.push(`demand impulse ${imp(ev.demand)}pp of GDP`);
   el.className = `shock show ${ev.cls || 'warn'}`;
-  el.innerHTML = `<div><b>${ev.icon} SHOCK — ${ev.name}.</b> ${e.msg}</div>
-    <span class="impact">Model impact, starting this quarter: ${parts.join(' · ')} (fading over ${Math.max(ev.supply.filter(v=>v).length, ev.demand.filter(v=>v).length)} quarters).</span>`;
+  el.innerHTML = `<b>${ev.icon} ${ev.name}.</b> ${e.msg}`;
+}
+
+// Picks the single biggest driver of this quarter's inflation move, for a
+// one-line "why" instead of a full itemized breakdown.
+function mainDriver(d){
+  const cands = [
+    {v:d.expTerm, label:`expectations pulling toward the ${fmt(S.target)}% target`},
+    {v:d.demTerm, label:`demand pressure from the output gap`},
+    {v:d.supShock||0, label:`a supply shock`},
+  ];
+  return cands.reduce((a,b)=> Math.abs(b.v)>Math.abs(a.v) ? b : a).label;
 }
 
 function logQuarter(prev, cur, d){
@@ -497,24 +514,15 @@ function logQuarter(prev, cur, d){
   }).join('');
   const realGap = (cur.rate - cur.inf) - (S.rstar ?? P.RSTAR);
   const dInf = cur.inf - prev.inf, dUn = cur.un - prev.un;
-  const reannHtml = d.reann ? `<span class="event ${d.reann.to>d.reann.from?'':'good'}">📣 Target re-announced:
-    ${fmt(d.reann.from)}% → ${fmt(d.reann.to)}% — markets punish moving goalposts
-    (credibility ${Math.round(d.reann.anchorBefore*100)}% → ${Math.round((d.reann.anchorBefore-d.reann.cost)*100)}%)</span>` : '';
+  const reannHtml = d.reann ? `<span class="event ${d.reann.to>d.reann.from?'':'good'}">📣 Target re-announced
+    ${fmt(d.reann.from)}%→${fmt(d.reann.to)}% (credibility ${Math.round(d.reann.anchorBefore*100)}%→${Math.round((d.reann.anchorBefore-d.reann.cost)*100)}%)</span>` : '';
   const html = `<div class="entry">
-    <span class="qtag">Q${S.q}</span> · Year ${Math.ceil(S.q/4)}<br>${evHtml}${reannHtml}
-    <b>Inflation ${fmt(prev.inf)}% → ${fmt(cur.inf)}%</b> (<span class="${cls(dInf)}">${sign(dInf)}pp</span>)
-    <ul>
-      <li>Expectations pulled inflation toward ${fmt(d.expected)}% (<span class="${cls(d.expTerm)}">${sign(d.expTerm)}</span>) — announced target ${fmt(S.target)}%, credibility ${Math.round(S.anchor*100)}%</li>
-      <li>Demand pressure from an output gap of ${sign(cur.gap)}% (<span class="${cls(d.demTerm)}">${sign(d.demTerm)}</span>)</li>
-      ${d.supShock ? `<li>Supply shock (<span class="${cls(d.supShock)}">${sign(d.supShock)}</span>)</li>` : ''}
-      <li>Statistical noise (<span class="${cls(d.infNoise)}">${sign(d.infNoise)}</span>)</li>
-    </ul>
-    <b>Unemployment ${fmt(prev.un)}% → ${fmt(cur.un)}%</b> (<span class="${cls(dUn)}">${sign(dUn)}pp</span>)
-    — labor market adjusting toward the Okun-implied level of ${fmt(P.USTAR - P.OKUN*cur.gap)}%.<br>
-    <b>GDP growth:</b> ${fmt(cur.gdp)}% annualized.<br>
-    <b>Policy stance:</b> real rate ${fmt(cur.rate - cur.inf)}% vs neutral ${fmt(S.rstar ?? P.RSTAR)}% → <b>${stanceLabel(realGap)}</b>;
-    your past rate decisions ${d.drag>=0?'added':'subtracted'} ${fmt(Math.abs(d.drag),2)}pp
-    ${d.drag>=0?'to':'from'} demand this quarter (2–3 quarter lag).
+    <span class="qtag">Q${S.q}</span> · Yr${Math.ceil(S.q/4)} — <b>${stanceLabel(realGap)}</b> stance
+    ${evHtml}${reannHtml}
+    <div class="nums">Inflation ${fmt(prev.inf)}→${fmt(cur.inf)}% (<span class="${cls(dInf)}">${sign(dInf)}</span>) ·
+      Unemployment ${fmt(prev.un)}→${fmt(cur.un)}% (<span class="${cls(dUn)}">${sign(dUn)}</span>) ·
+      GDP ${fmt(cur.gdp)}%</div>
+    <div class="why">Why: ${mainDriver(d)}.</div>
   </div>`;
   $('logBody').insertAdjacentHTML('afterbegin', html);
 }
