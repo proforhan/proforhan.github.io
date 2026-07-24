@@ -61,7 +61,7 @@
   .chart-panel{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:9px 12px; flex:none;}
   .legend{display:flex; gap:18px; font-size:.78rem; color:var(--muted); margin-bottom:5px; flex-wrap:wrap;}
   .chip{display:inline-block; width:22px; height:4px; border-radius:2px; margin-right:6px; vertical-align:middle;}
-  canvas{width:100%; height:180px; display:block;}
+  canvas{width:100%; height:210px; display:block;}
 
   /* game control bar (top of chart) — left-aligned: Start, Policy rate, Advance */
   .gamebar{
@@ -93,7 +93,6 @@
     border-radius:10px; padding:7px 12px; flex:none;
   }
   .mission b{color:var(--text);}
-  .stance-note{font-size:.8rem; color:var(--muted); text-align:center; min-height:1.6em;}
   .tgt-row{display:flex; align-items:center; gap:12px;}
   .tgt-row input{flex:1; accent-color:#e6edf7;}
   .tgt-row span{font-weight:700; font-variant-numeric:tabular-nums; min-width:52px; text-align:right;}
@@ -231,7 +230,6 @@
         <button id="advanceBtn">Advance Quarter ▸</button>
       </div>
     </div>
-    <div class="stance-note" id="stanceNote"></div>
     <div class="legend">
       <span><span class="chip" style="background:var(--inf)"></span>Inflation</span>
       <span><span class="chip" style="background:var(--un)"></span>Unemployment</span>
@@ -592,20 +590,7 @@ function render(){
   const score = S.q ? Math.round(100*Math.exp(-(S.lossSum/S.q)/6)) : 100;
   $('cScore').textContent = score;
   $('cScoreSub').textContent = S.q ? 'if your term ended today' : 'start of term';
-  updateStanceNote();
   drawChart();
-}
-
-function updateStanceNote(){
-  if(!S) return;
-  const cur = last(S.hist);
-  const r = parseFloat($('rateInput').value) || 0;
-  const rstar = cur.rstar ?? P.RSTAR;
-  const realGap = (r - cur.inf) - rstar;
-  const d = r - cur.rate;
-  $('stanceNote').textContent =
-    `${d===0?'Holding':'Moving '+(d>0?'+':'')+Math.round(d*100)+'bp to'} a ${stanceLabel(realGap)} stance ` +
-    `(real rate ${fmt(r-cur.inf)}% vs neutral ${fmt(rstar)}%). Effects arrive over the next 2–3 quarters.`;
 }
 
 function drawChart(){
@@ -664,7 +649,6 @@ function drawChart(){
 $('startBtn').addEventListener('click', newGame);
 $('advanceBtn').addEventListener('click', advance);
 $('scenSelect').addEventListener('change', newGame);
-$('rateInput').addEventListener('input', updateStanceNote);
 window.addEventListener('resize', ()=>{ if(S) drawChart(); });
 document.addEventListener('keydown', e=>{ if(e.key==='Enter' && !$('modal').classList.contains('show')) advance(); });
 
