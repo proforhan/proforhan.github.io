@@ -108,7 +108,7 @@ bookCarousel?.addEventListener("keydown", (event) => {
 });
 
 const ICON_MAP = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M4.6 7.5h14.8M4.6 16.5h14.8"/></svg>`;
-const ICON_BANK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 3 8h18z"/><path d="M4 21h16M5 21V10M9.5 21V10M14.5 21V10M19 21V10"/></svg>`;
+const ICON_GAME = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 7.5h7a5.5 5.5 0 0 1 5.2 7.3l-1 2.9a2.4 2.4 0 0 1-4.1.7l-1.1-1.4h-5l-1.1 1.4a2.4 2.4 0 0 1-4.1-.7l-1-2.9a5.5 5.5 0 0 1 5.2-7.3Z"/><path d="M7.5 11v4M5.5 13h4"/><circle cx="16.5" cy="11.8" r=".8" fill="currentColor" stroke="none"/><circle cx="18.5" cy="14" r=".8" fill="currentColor" stroke="none"/></svg>`;
 const ICON_STOCKS = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l3.5-4 3 2.2L21 6"/><path d="M16.5 6H21v4.5"/></svg>`;
 
 const FEATURED_PROJECTS = [
@@ -120,11 +120,13 @@ const FEATURED_PROJECTS = [
     icon: ICON_MAP
   },
   {
-    title: "Fed Chair: The Dual Mandate Game",
-    description: "Set interest rates, manage inflation and unemployment, and steer the economy through 40 quarters.",
+    title: "Fed Chair Game",
+    description: "An interactive economics game: set interest rates, manage inflation and unemployment, and guide the economy through 40 quarters.",
     url: "fed-chair-game.html",
-    meta: "Play in browser ↗",
-    icon: ICON_BANK
+    meta: "Play the game ↗",
+    icon: ICON_GAME,
+    tag: "Interactive economics game",
+    variant: "game"
   },
   {
     title: "LLM Portfolio Battle",
@@ -135,9 +137,9 @@ const FEATURED_PROJECTS = [
   }
 ];
 
-function projectCard({ title, description, url, meta, icon }) {
+function projectCard({ title, description, url, meta, icon, tag, variant }) {
   const anchor = document.createElement("a");
-  anchor.className = "repo-card";
+  anchor.className = `repo-card${variant ? ` repo-card-${variant}` : ""}`;
   anchor.href = url;
   if (!url.startsWith("#")) {
     anchor.target = "_blank";
@@ -154,6 +156,12 @@ function projectCard({ title, description, url, meta, icon }) {
   nameEl.textContent = title;
   head.append(iconEl, nameEl);
 
+  const tagEl = tag ? document.createElement("span") : null;
+  if (tagEl) {
+    tagEl.className = "project-tag";
+    tagEl.textContent = tag;
+  }
+
   const descriptionEl = document.createElement("p");
   descriptionEl.className = "repo-desc";
   descriptionEl.textContent = description;
@@ -164,7 +172,9 @@ function projectCard({ title, description, url, meta, icon }) {
   metaSpan.textContent = meta;
   metaEl.appendChild(metaSpan);
 
-  anchor.append(head, descriptionEl, metaEl);
+  anchor.append(head);
+  if (tagEl) anchor.append(tagEl);
+  anchor.append(descriptionEl, metaEl);
   return anchor;
 }
 
