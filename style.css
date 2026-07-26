@@ -1,3 +1,4 @@
+
 :root {
   --bg: #fbf9f5;
   --bg-alt: #f2ede4;
@@ -118,10 +119,10 @@ section[id] { scroll-margin-top: calc(var(--header-height) + 1rem); }
 
 .tracker-card { margin-top: 2rem; padding: 1.6rem; border-radius: 16px; background: var(--card); border: 1px solid var(--rule); display: grid; grid-template-columns: minmax(260px,.85fr) minmax(0,1.5fr); gap: 1.5rem; align-items: center; }
 .tracker-copy h3 { font-size: 1.55rem; }
-.tracker-mobile-note { display: none; color: var(--ink-soft); font-size: .9rem; }
+
 .data-card { margin: 0; padding: .8rem; border-radius: 12px; background: var(--bg-alt); border: 1px solid var(--rule); }
-.data-embed { position: relative; width: 100%; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 9px; background: white; }
-.data-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+
 .data-card figcaption { color: var(--ink-soft); font-size: .78rem; margin-top: .45rem; }
 
 .section-heading-row { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; }
@@ -173,8 +174,7 @@ section[id] { scroll-margin-top: calc(var(--header-height) + 1rem); }
   .book-carousel { grid-auto-columns: 84%; gap: 1rem; }
   .section-heading-row { align-items: center; }
   .tracker-card { padding: 1.25rem; }
-  #walmart-tracker { display: none !important; }
-  .tracker-mobile-note { display: block; }
+  
   .hero-actions .btn, .section-actions .btn { text-align: center; }
 }
 
@@ -192,4 +192,52 @@ section[id] { scroll-margin-top: calc(var(--header-height) + 1rem); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+/* ===== Walmart static chart ===== */
+.tracker-result {
+  display: inline-flex;
+  flex-direction: column;
+  gap: .1rem;
+  margin: .35rem 0 1.15rem;
+  padding: .9rem 1.05rem;
+  border-radius: 12px;
+  background: var(--coral-soft);
+  border: 1px solid rgba(240,96,63,.22);
+}
+.tracker-result-label {
+  color: #9b3d2b;
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.tracker-result strong {
+  color: var(--coral);
+  font-family: var(--serif);
+  font-size: clamp(1.85rem, 4vw, 2.55rem);
+  line-height: 1.05;
+}
+.tracker-result-detail {
+  color: var(--ink-soft);
+  font-size: .82rem;
+  font-weight: 600;
+}
+.tracker-static-chart {
+  overflow: hidden;
+  background: #fff;
+}
+.tracker-static-chart img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 9px;
+}
+.tracker-static-chart figcaption {
+  padding: .35rem .1rem 0;
+}
+
+@media (max-width: 720px) {
+  .tracker-result { width: 100%; }
+  .tracker-static-chart { padding: .55rem; }
 }

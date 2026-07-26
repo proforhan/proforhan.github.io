@@ -1,3 +1,4 @@
+
 document.getElementById("year").textContent = new Date().getFullYear();
 
 const toggle = document.querySelector(".nav-toggle");
@@ -34,23 +35,7 @@ window.addEventListener("resize", () => {
   if (window.innerWidth > 980) closeMenu();
 });
 
-const WALMART_CHART_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQhdq30a-BoalCItw-ZlbBAHyrrx2US1Lu98C1HMhjFxOuRQVs7cEHi5qe24HvMx83zyEOPzpkRgyO1/pubchart?oid=271917230&format=interactive";
 const BUTTONDOWN_USER = "orhan";
-
-const walmartEl = document.getElementById("walmart-tracker");
-const walmartFullscreen = document.getElementById("walmart-fullscreen");
-if (WALMART_CHART_URL) {
-  walmartFullscreen.href = WALMART_CHART_URL;
-  if (walmartEl && window.matchMedia("(min-width: 721px)").matches) {
-    const iframe = document.createElement("iframe");
-    iframe.src = WALMART_CHART_URL;
-    iframe.title = "Walmart Inflation Tracker interactive chart";
-    iframe.loading = "lazy";
-    iframe.referrerPolicy = "strict-origin-when-cross-origin";
-    walmartEl.querySelector(".data-embed").appendChild(iframe);
-    walmartEl.hidden = false;
-  }
-}
 
 const subscribeEl = document.getElementById("subscribe-cta");
 if (subscribeEl && BUTTONDOWN_USER) {
@@ -182,3 +167,4 @@ const projectGrid = document.getElementById("repo-grid");
 if (projectGrid) {
   projectGrid.replaceChildren(...FEATURED_PROJECTS.map(projectCard));
 }
+
