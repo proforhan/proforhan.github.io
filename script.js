@@ -1,4 +1,3 @@
-
 document.getElementById("year").textContent = new Date().getFullYear();
 
 const toggle = document.querySelector(".nav-toggle");
@@ -35,7 +34,23 @@ window.addEventListener("resize", () => {
   if (window.innerWidth > 980) closeMenu();
 });
 
+const WALMART_CHART_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQhdq30a-BoalCItw-ZlbBAHyrrx2US1Lu98C1HMhjFxOuRQVs7cEHi5qe24HvMx83zyEOPzpkRgyO1/pubchart?oid=271917230&format=interactive";
 const BUTTONDOWN_USER = "orhan";
+
+const walmartEl = document.getElementById("walmart-tracker");
+const walmartFullscreen = document.getElementById("walmart-fullscreen");
+if (WALMART_CHART_URL) {
+  walmartFullscreen.href = WALMART_CHART_URL;
+  if (walmartEl && window.matchMedia("(min-width: 721px)").matches) {
+    const iframe = document.createElement("iframe");
+    iframe.src = WALMART_CHART_URL;
+    iframe.title = "Walmart Inflation Tracker interactive chart";
+    iframe.loading = "lazy";
+    iframe.referrerPolicy = "strict-origin-when-cross-origin";
+    walmartEl.querySelector(".data-embed").appendChild(iframe);
+    walmartEl.hidden = false;
+  }
+}
 
 const subscribeEl = document.getElementById("subscribe-cta");
 if (subscribeEl && BUTTONDOWN_USER) {
@@ -92,39 +107,24 @@ bookCarousel?.addEventListener("keydown", (event) => {
   if (event.key === "ArrowLeft") scrollBooks(-1);
 });
 
+const GITHUB_USER = "proforhan";
+const FEATURED_REPOS = ["isochronic-maps", "orhans-morning-book"];
 const ICON_MAP = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M4.6 7.5h14.8M4.6 16.5h14.8"/></svg>`;
-const ICON_GAME = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 7.5h7a5.5 5.5 0 0 1 5.2 7.3l-1 2.9a2.4 2.4 0 0 1-4.1.7l-1.1-1.4h-5l-1.1 1.4a2.4 2.4 0 0 1-4.1-.7l-1-2.9a5.5 5.5 0 0 1 5.2-7.3Z"/><path d="M7.5 11v4M5.5 13h4"/><circle cx="16.5" cy="11.8" r=".8" fill="currentColor" stroke="none"/><circle cx="18.5" cy="14" r=".8" fill="currentColor" stroke="none"/></svg>`;
+const ICON_CHART = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"/><rect x="5" y="11" width="3" height="7" rx="1"/><rect x="10.5" y="7" width="3" height="11" rx="1"/><rect x="16" y="4" width="3" height="14" rx="1"/></svg>`;
+const ICON_BANK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 3 8h18z"/><path d="M4 21h16M5 21V10M9.5 21V10M14.5 21V10M19 21V10"/></svg>`;
 const ICON_STOCKS = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l3.5-4 3 2.2L21 6"/><path d="M16.5 6H21v4.5"/></svg>`;
-
-const FEATURED_PROJECTS = [
-  {
-    title: "World Isochronic Map",
-    description: "Explore how far travelers could reach from major world cities within different travel-time bands, inspired by Francis Galton's 1881 isochronic map.",
-    url: "https://proforhan.github.io/isochronic-maps/",
-    meta: "Explore the interactive map ↗",
-    icon: ICON_MAP
-  },
-  {
-    title: "Fed Chair Game",
-    description: "An interactive economics game: set interest rates, manage inflation and unemployment, and guide the economy through 40 quarters.",
-    url: "fed-chair-game.html",
-    meta: "Play the game ↗",
-    icon: ICON_GAME,
-    tag: "Interactive economics game",
-    variant: "game"
-  },
-  {
-    title: "LLM Portfolio Battle",
-    description: "Four AI models manage competing portfolios in a weekly comparison against the S&P 500.",
-    url: "https://manasareddy2417.github.io/LLM-performance-tracker/",
-    meta: "View the live project ↗",
-    icon: ICON_STOCKS
-  }
+const DISPLAY = {
+  "isochronic-maps": { title: "World Isochronic Map", icon: ICON_MAP },
+  "orhans-morning-book": { title: "Orhan's Morning Brief", icon: ICON_CHART }
+};
+const MANUAL_PROJECTS = [
+  { title: "Fed Chair: The Dual Mandate Game", description: "Set interest rates, manage inflation and unemployment, and steer the economy through 40 quarters.", url: "fed-chair-game.html", meta: "Play in browser ↗", icon: ICON_BANK },
+  { title: "LLM Portfolio Battle", description: "Four AI models manage competing portfolios in a weekly comparison against the S&P 500.", url: "https://manasareddy2417.github.io/LLM-performance-tracker/", meta: "Live project ↗", icon: ICON_STOCKS }
 ];
 
-function projectCard({ title, description, url, meta, icon, tag, variant }) {
+function projectCard({ title, description, url, meta, icon }) {
   const anchor = document.createElement("a");
-  anchor.className = `repo-card${variant ? ` repo-card-${variant}` : ""}`;
+  anchor.className = "repo-card";
   anchor.href = url;
   if (!url.startsWith("#")) {
     anchor.target = "_blank";
@@ -141,12 +141,6 @@ function projectCard({ title, description, url, meta, icon, tag, variant }) {
   nameEl.textContent = title;
   head.append(iconEl, nameEl);
 
-  const tagEl = tag ? document.createElement("span") : null;
-  if (tagEl) {
-    tagEl.className = "project-tag";
-    tagEl.textContent = tag;
-  }
-
   const descriptionEl = document.createElement("p");
   descriptionEl.className = "repo-desc";
   descriptionEl.textContent = description;
@@ -157,14 +151,37 @@ function projectCard({ title, description, url, meta, icon, tag, variant }) {
   metaSpan.textContent = meta;
   metaEl.appendChild(metaSpan);
 
-  anchor.append(head);
-  if (tagEl) anchor.append(tagEl);
-  anchor.append(descriptionEl, metaEl);
+  anchor.append(head, descriptionEl, metaEl);
   return anchor;
 }
 
-const projectGrid = document.getElementById("repo-grid");
-if (projectGrid) {
-  projectGrid.replaceChildren(...FEATURED_PROJECTS.map(projectCard));
+async function loadProjects() {
+  const grid = document.getElementById("repo-grid");
+  if (!grid) return;
+  const cards = MANUAL_PROJECTS.map(projectCard);
+  try {
+    const response = await fetch(`https://api.github.com/users/${GITHUB_USER}/repos?sort=updated&per_page=100`);
+    if (!response.ok) throw new Error(`GitHub returned ${response.status}`);
+    const repos = await response.json();
+    const selected = FEATURED_REPOS.map((name) => repos.find((repo) => repo.name === name)).filter(Boolean);
+    selected.forEach((repo) => {
+      const display = DISPLAY[repo.name];
+      const updated = new Date(repo.pushed_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+      cards.unshift(projectCard({
+        title: display.title,
+        description: repo.description || "Selected open-source project by Orhan Erdem.",
+        url: repo.html_url,
+        meta: `Updated ${updated}`,
+        icon: display.icon
+      }));
+    });
+    grid.replaceChildren(...cards);
+  } catch (error) {
+    grid.replaceChildren(...cards);
+    const note = document.createElement("p");
+    note.className = "repo-error";
+    note.textContent = "GitHub project details could not be refreshed, so the selected projects are shown without live metadata.";
+    grid.appendChild(note);
+  }
 }
-
+loadProjects();
