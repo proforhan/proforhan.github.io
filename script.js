@@ -95,6 +95,7 @@ bookCarousel?.addEventListener("keydown", (event) => {
 const ICON_MAP = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M4.6 7.5h14.8M4.6 16.5h14.8"/></svg>`;
 const ICON_GAME = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 7.5h7a5.5 5.5 0 0 1 5.2 7.3l-1 2.9a2.4 2.4 0 0 1-4.1.7l-1.1-1.4h-5l-1.1 1.4a2.4 2.4 0 0 1-4.1-.7l-1-2.9a5.5 5.5 0 0 1 5.2-7.3Z"/><path d="M7.5 11v4M5.5 13h4"/><circle cx="16.5" cy="11.8" r=".8" fill="currentColor" stroke="none"/><circle cx="18.5" cy="14" r=".8" fill="currentColor" stroke="none"/></svg>`;
 const ICON_STOCKS = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l3.5-4 3 2.2L21 6"/><path d="M16.5 6H21v4.5"/></svg>`;
+const ICON_DATARIUM = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 13l2.5-3L13 12l3-4"/><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/></svg>`;
 
 const FEATURED_PROJECTS = [
   {
@@ -119,6 +120,14 @@ const FEATURED_PROJECTS = [
     url: "https://manasareddy2417.github.io/LLM-performance-tracker/",
     meta: "View the live project ↗",
     icon: ICON_STOCKS
+  },
+  {
+    title: "Datarium / StockPik",
+    description: "Datarium is an AI consulting studio bridging artificial intelligence, finance, and economics. StockPik, its flagship app, uses AI to help everyday investors research and evaluate stocks.",
+    url: "https://datariumconsulting.com/",
+    meta: "Visit Datarium ↗",
+    icon: ICON_DATARIUM,
+    tag: "AI consulting & product"
   }
 ];
 
