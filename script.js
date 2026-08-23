@@ -1,4 +1,3 @@
-
 document.getElementById("year").textContent = new Date().getFullYear();
 
 const toggle = document.querySelector(".nav-toggle");
@@ -61,7 +60,7 @@ if (subscribeEl && BUTTONDOWN_USER) {
 
   const note = document.createElement("p");
   note.className = "subscribe-note";
-  note.textContent = "You’ll receive a confirmation email.";
+  note.textContent = "No spam, just the brief every morning.";
 
   const wrap = document.createElement("div");
   wrap.className = "subscribe-cta-wrap";
@@ -180,7 +179,7 @@ if (projectGrid) {
 /* ===== Walmart Google Sheets auto-update ===== */
 const WALMART_SHEET_ID = "1qOdMjkWm0JccWKO6gTpHF5wDVZE3MuQj6oKXnURuKVk";
 const WALMART_SHEET_GID = "0";
-const WALMART_QUERY = "select A,I,J,L where A is not null";
+const WALMART_QUERY = "select A,K,L,N where A is not null";
 const WALMART_FALLBACK_DATA = [
   { label: "Jan 2026", walmart: 100.00, mom: null, cpi: 100.00 },
   { label: "Feb 2026", walmart: 100.00, mom: 0.00, cpi: 100.27 },
@@ -188,7 +187,8 @@ const WALMART_FALLBACK_DATA = [
   { label: "Apr 2026", walmart: 101.42, mom: 0.00, cpi: 101.78 },
   { label: "May 2026", walmart: 101.72, mom: 0.29, cpi: 102.26 },
   { label: "Jun 2026", walmart: 101.42, mom: -0.29, cpi: 101.83 },
-  { label: "Jul 2026", walmart: 98.75, mom: -2.64, cpi: null }
+  { label: "Jul 2026", walmart: 98.75, mom: -2.64, cpi: 101.91 },
+  { label: "Aug 2026", walmart: 101.42, mom: 2.71, cpi: null }
 ];
 
 function walmartCellText(cell) {
