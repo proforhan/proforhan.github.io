@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Data: Home Values in Dallas, Plano, Frisco &amp; the U.S. | Orhan Erdem, Ph.D.</title>
+<meta content="Monthly typical home values for Dallas, Plano, Frisco and the United States from the Zillow Home Value Index, updated automatically each month." name="description"/>
+<link href="https://proforhan.github.io/data.html" rel="canonical"/>
+<link href="favicon.svg" rel="icon" type="image/svg+xml"/>
+<meta content="#0e7c72" name="theme-color"/>
+<meta content="website" property="og:type"/>
+<meta content="https://proforhan.github.io/data.html" property="og:url"/>
+<meta content="Home values: Dallas, Plano, Frisco vs. the U.S." property="og:title"/>
+<meta content="Monthly Zillow Home Value Index for three North Texas cities and the U.S., updated automatically." property="og:description"/>
+<meta content="https://proforhan.github.io/images/og-card.jpg" property="og:image"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="style.css?v=20260728-3" rel="stylesheet" />
+<script data-goatcounter="https://orhanerdem.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<style>
+  .data-hero { padding: 4rem 1.25rem 2.5rem; background: radial-gradient(900px 420px at 10% -10%, var(--accent-soft), transparent 60%), radial-gradient(800px 420px at 90% 0%, var(--violet-soft), transparent 62%), var(--bg); position: relative; }
+  .data-hero::after { content: ""; position: absolute; inset: auto 0 0; height: 4px; background: var(--grad); }
+  .data-hero h1 { font-size: clamp(2rem, 4.6vw, 3rem); margin-bottom: .4rem; }
+  .data-hero p { color: var(--ink-soft); max-width: 70ch; margin: 0; }
+  .nav-links a[aria-current="page"] { color: var(--accent); }
+
+  .area-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+  .area-card { background: var(--card); border: 1px solid var(--rule); border-top: 4px solid var(--c); border-radius: 12px; padding: 1rem 1.1rem; }
+  .area-card .name { font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+  .area-card .val { font-family: var(--serif); font-size: 1.85rem; font-weight: 700; line-height: 1.2; font-variant-numeric: tabular-nums; }
+  .area-card .chg { font-size: .88rem; color: var(--ink-soft); }
+  .up { color: #1f7a4d; } .down { color: #b4442f; }
+
+  .chart-card { background: var(--card); border: 1px solid var(--rule); border-radius: 12px; padding: 1.25rem 1.25rem .75rem; margin-bottom: 2rem; }
+  .chart-head { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; justify-content: space-between; align-items: center; margin-bottom: .75rem; }
+  .chart-head h3 { margin: 0; font-size: 1.25rem; }
+  .controls { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 8px; padding: 3px; gap: 2px; }
+  .seg button { font: 600 .82rem var(--sans); color: var(--ink-soft); background: transparent; border: 0; border-radius: 5px; padding: .35rem .7rem; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: white; }
+  .legend { display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; font-size: .88rem; margin-bottom: .5rem; }
+  .legend span { display: inline-flex; align-items: center; gap: .4rem; }
+  .legend i { width: 18px; height: 3px; border-radius: 2px; background: var(--c); display: inline-block; }
+  .legend i.dash { background: repeating-linear-gradient(90deg, var(--c) 0 5px, transparent 5px 8px); }
+  #chart { position: relative; }
+  #chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  #chart text { font: 500 11.5px var(--sans); fill: var(--ink-soft); }
+  .tip { position: absolute; pointer-events: none; background: var(--ink); color: white; font-size: .8rem; padding: .5rem .65rem; border-radius: 7px; min-width: 170px; box-shadow: 0 8px 20px rgba(28,34,48,.2); }
+  .tip b { display: block; margin-bottom: .2rem; }
+  .tip div { display: flex; justify-content: space-between; gap: 1rem; font-variant-numeric: tabular-nums; }
+  .tip div span::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--c); margin-right: .4rem; }
+
+  .tbl-wrap { overflow-x: auto; background: var(--card); border: 1px solid var(--rule); border-radius: 12px; margin-bottom: 2rem; }
+  .data-tbl { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: .95rem; }
+  .data-tbl th, .data-tbl td { padding: .7rem 1rem; text-align: right; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+  .data-tbl th:first-child, .data-tbl td:first-child { text-align: left; }
+  .data-tbl th { font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+  .data-tbl tr:last-child td { border-bottom: 0; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--c); margin-right: .5rem; }
+  .data-notes { font-size: .9rem; color: var(--ink-soft); max-width: 75ch; }
+  .data-notes p { margin-bottom: .6rem; }
+  .load-error { color: #b4442f; }
+
+  @media (max-width: 860px) { .area-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 400px) { .area-card .val { font-size: 1.5rem; } }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="site-header">
+<nav aria-label="Primary navigation" class="nav">
+<a class="nav-brand" href="index.html">Orhan Erdem</a>
+<button aria-controls="primary-nav" aria-expanded="false" aria-label="Open navigation menu" class="nav-toggle" type="button">☰</button>
+<ul class="nav-links" id="primary-nav">
+<li><a href="index.html#about">About</a></li>
+<li><a href="index.html#research">Research</a></li>
+<li><a href="index.html#projects">Projects</a></li>
+<li><a href="index.html#books">Books</a></li>
+<li><a href="index.html#teaching">Teaching</a></li>
+<li><a href="index.html#media">Media</a></li>
+<li><a aria-current="page" href="data.html">Data</a></li>
+<li><a href="index.html#contact">Contact</a></li>
+<li><a class="nav-cv" href="Orhan-Erdem-CV.pdf" rel="noopener" target="_blank">CV ↓</a></li>
+</ul>
+</nav>
+</header>
+
+<main id="main-content">
+<section class="data-hero">
+<div class="section-inner">
+<p class="eyebrow">Data · Housing</p>
+<h1>Home values: Dallas, Plano, Frisco and the U.S.</h1>
+<p id="asof">Typical home values from the Zillow Home Value Index, updated automatically each month.</p>
+</div>
+</section>
+
+<section class="section" style="padding-top:2.5rem">
+<div class="section-inner">
+<div class="area-cards" id="cards" aria-live="polite"></div>
+
+<div class="chart-card">
+<div class="chart-head">
+<h3 id="chart-title">Typical home value</h3>
+<div class="controls">
+<div class="seg" role="group" aria-label="Measure">
+<button type="button" data-mode="value" aria-pressed="true">Dollars</button>
+<button type="button" data-mode="index" aria-pressed="false">Growth</button>
+</div>
+<div class="seg" role="group" aria-label="Time range">
+<button type="button" data-years="5" aria-pressed="false">5Y</button>
+<button type="button" data-years="10" aria-pressed="true">10Y</button>
+<button type="button" data-years="0" aria-pressed="false">Since 2000</button>
+</div>
+</div>
+</div>
+<div class="legend" id="legend"></div>
+<div id="chart"></div>
+</div>
+
+<h3>Change over time</h3>
+<div class="tbl-wrap">
+<table class="data-tbl" id="tbl">
+<thead><tr><th>Area</th><th id="th-latest">Latest</th><th>1 month</th><th>1 year</th><th>5 years</th><th>10 years</th><th>vs. U.S.</th></tr></thead>
+<tbody></tbody>
+</table>
+</div>
+
+<div class="data-notes">
+<p><strong>What this measures.</strong> The Zillow Home Value Index (ZHVI) estimates the typical value of homes in the middle third of the market (33rd–67th percentile), for single-family homes and condos combined. It is smoothed and seasonally adjusted. It is not an average sale price or a listing price. Dallas, Plano and Frisco are city boundaries; “United States” is the national index.</p>
+<p><strong>Growth view.</strong> Each line is rescaled to 100 at the start of the chosen time range, so you can compare percentage growth directly.</p>
+<p><strong>Updates.</strong> Zillow publishes new figures around the middle of each month for the previous month. A scheduled job on this site downloads them and refreshes this page. <span id="updated"></span></p>
+<p>Data: <a href="https://www.zillow.com/research/data/" rel="noopener" target="_blank">Zillow Research, Zillow Home Value Index</a>. Compiled by Orhan Erdem.</p>
+</div>
+</div>
+</section>
+</main>
+
+<footer class="site-footer">
+<p>© <span id="year"></span> Orhan Erdem · Built with plain HTML · No advertising or behavioral tracking.</p>
+</footer>
+
+<script>
+(() => {
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Nav menu toggle (same behavior as the home page)
+  const toggle = document.querySelector(".nav-toggle"), links = document.querySelector(".nav-links");
+  const setMenu = open => { links.classList.toggle("open", open); toggle.setAttribute("aria-expanded", open); toggle.setAttribute("aria-label", open ? "Close navigation menu" : "Open navigation menu"); };
+  toggle.addEventListener("click", () => setMenu(!links.classList.contains("open")));
+  document.addEventListener("keydown", e => { if (e.key === "Escape") setMenu(false); });
+  addEventListener("resize", () => { if (innerWidth > 980) setMenu(false); });
+
+  const AREAS = [
+    { name: "Frisco", color: "#f0603f" },
+    { name: "Plano", color: "#6d5ae0" },
+    { name: "Dallas", color: "#0e7c72" },
+    { name: "United States", color: "#55606f", dash: true, short: "U.S." },
+  ];
+  const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const MONL = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const mLabel = (ym, long) => { const [y, m] = ym.split("-"); return (long ? MONL : MON)[m - 1] + " " + y; };
+  const usd = v => "$" + Math.round(v).toLocaleString("en-US");
+  const usdK = v => v >= 1e6 ? "$" + (v / 1e6).toFixed(1) + "M" : "$" + Math.round(v / 1000) + "K";
+  const pct = (a, b) => (a / b - 1) * 100;
+  const fmtP = p => { if (p == null || !isFinite(p)) return "–"; const r = +p.toFixed(1); return (r > 0 ? "+" : r < 0 ? "−" : "") + Math.abs(r).toFixed(1) + "%"; };
+  const cls = p => p > 0.05 ? "up" : p < -0.05 ? "down" : "";
+
+  let D, months, byArea, mode = "value", years = 10;
+
+  fetch("data/zhvi.json", { cache: "no-cache" })
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(init)
+    .catch(() => { document.getElementById("cards").innerHTML = '<p class="load-error">The data could not be loaded right now. Please try again later.</p>'; });
+
+  function init(data) {
+    D = data;
+    // Align every series on one month axis
+    const set = new Set();
+    AREAS.forEach(a => (D.series[a.name] || []).forEach(p => set.add(p[0])));
+    months = [...set].sort();
+    byArea = {};
+    AREAS.forEach(a => { const m = new Map(D.series[a.name] || []); byArea[a.name] = months.map(k => m.has(k) ? m.get(k) : null); });
+
+    const n = months.length, last = months[n - 1];
+    document.getElementById("asof").textContent = `Typical home values from the Zillow Home Value Index. Latest data: ${mLabel(last, true)}.`;
+    document.getElementById("th-latest").textContent = mLabel(last);
+    document.getElementById("updated").textContent = `Last checked ${D.updated}.`;
+
+    const back = (name, k) => { const s = byArea[name]; return n - 1 - k >= 0 ? s[n - 1 - k] : null; };
+    const us = back("United States", 0);
+
+    document.getElementById("cards").innerHTML = AREAS.map(a => {
+      const v = back(a.name, 0), y = pct(v, back(a.name, 12));
+      return `<div class="area-card" style="--c:${a.color}"><div class="name">${a.name}</div><div class="val">${usd(v)}</div><div class="chg"><span class="${cls(y)}">${fmtP(y)}</span> over the past year</div></div>`;
+    }).join("");
+
+    document.querySelector("#tbl tbody").innerHTML = AREAS.map(a => {
+      const v = back(a.name, 0);
+      const c = [1, 12, 60, 120].map(k => pct(v, back(a.name, k)));
+      const vsUS = a.name === "United States" ? "–" : fmtP(pct(v, us));
+      return `<tr><td><span class="dot" style="--c:${a.color}"></span>${a.name}</td><td>${usd(v)}</td>${c.map(p => `<td class="${cls(p)}">${fmtP(p)}</td>`).join("")}<td>${vsUS}</td></tr>`;
+    }).join("");
+
+    document.getElementById("legend").innerHTML = AREAS.map(a => `<span style="--c:${a.color}"><i class="${a.dash ? "dash" : ""}"></i>${a.name}</span>`).join("");
+
+    document.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
+      b.parentElement.querySelectorAll("button").forEach(o => o.setAttribute("aria-pressed", o === b));
+      if (b.dataset.mode) mode = b.dataset.mode; else years = +b.dataset.years;
+      draw();
+    }));
+    draw();
+    let t; addEventListener("resize", () => { clearTimeout(t); t = setTimeout(draw, 120); });
+  }
+
+  function niceStep(range, target) { const raw = range / target, p = 10 ** Math.floor(Math.log10(raw)), f = raw / p; return (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * p; }
+
+  function draw() {
+    const box = document.getElementById("chart");
+    const start = years ? Math.max(0, months.length - 1 - years * 12) : 0;
+    const M = months.slice(start);
+    const S = AREAS.map(a => {
+      const raw = byArea[a.name].slice(start);
+      if (mode === "value") return raw;
+      const base = raw.find(v => v != null);
+      return raw.map(v => v == null ? null : v / base * 100);
+    });
+    document.getElementById("chart-title").textContent = mode === "value" ? "Typical home value" : `Growth since ${mLabel(M[0])} (= 100)`;
+
+    const W = Math.max(300, box.clientWidth), H = W < 560 ? 280 : 380;
+    const m = { l: mode === "value" ? 58 : 44, r: 12, t: 12, b: 28 }, iw = W - m.l - m.r, ih = H - m.t - m.b;
+    const all = S.flat().filter(v => v != null);
+    let lo = Math.min(...all), hi = Math.max(...all);
+    const step = niceStep(hi - lo || 1, W < 560 ? 4 : 5);
+    lo = Math.floor(lo / step) * step; hi = Math.ceil(hi / step) * step;
+    const x = i => m.l + (M.length === 1 ? 0 : i / (M.length - 1)) * iw;
+    const y = v => m.t + (1 - (v - lo) / (hi - lo)) * ih;
+    const yl = v => mode === "value" ? usdK(v) : Math.round(v);
+
+    let g = "";
+    for (let v = lo; v <= hi + 1e-9; v += step)
+      g += `<line x1="${m.l}" x2="${W - m.r}" y1="${y(v)}" y2="${y(v)}" stroke="#ece5d8"/><text x="${m.l - 8}" y="${y(v) + 4}" text-anchor="end">${yl(v)}</text>`;
+    const nYears = M.length / 12, every = Math.max(1, Math.ceil(nYears / (W < 560 ? 5 : 10)));
+    M.forEach((k, i) => { if (k.endsWith("-01") && (+k.slice(0, 4)) % every === 0) g += `<text x="${x(i)}" y="${H - 8}" text-anchor="middle">${k.slice(0, 4)}</text>`; });
+    g += `<line x1="${m.l}" x2="${W - m.r}" y1="${m.t + ih}" y2="${m.t + ih}" stroke="var(--rule)"/>`;
+
+    const paths = AREAS.map((a, j) => {
+      let d = "", pen = false;
+      S[j].forEach((v, i) => { if (v == null) { pen = false; return; } d += (pen ? "L" : "M") + x(i).toFixed(1) + "," + y(v).toFixed(1); pen = true; });
+      return `<path d="${d}" fill="none" stroke="${a.color}" stroke-width="${a.dash ? 2 : 2.4}" ${a.dash ? 'stroke-dasharray="6 4"' : ""} stroke-linejoin="round"/>`;
+    }).join("");
+    const li = M.length - 1;
+    const ends = AREAS.map((a, j) => S[j][li] == null ? "" : `<circle cx="${x(li)}" cy="${y(S[j][li])}" r="4" fill="${a.color}" stroke="#fff" stroke-width="2"/>`).join("");
+
+    box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Line chart comparing typical home values in Dallas, Plano, Frisco and the United States">
+      ${g}${paths}${ends}
+      <g id="hov" visibility="hidden"><line id="hl" y1="${m.t}" y2="${m.t + ih}" stroke="#9aa3ad" stroke-dasharray="3 3"/>${AREAS.map((a, j) => `<circle data-j="${j}" r="4" fill="${a.color}" stroke="#fff" stroke-width="2"/>`).join("")}</g>
+    </svg><div class="tip" id="tip" hidden></div>`;
+
+    const svg = box.querySelector("svg"), hov = svg.querySelector("#hov"), tip = box.querySelector("#tip");
+    const fmtV = v => v == null ? "–" : mode === "value" ? usd(v) : v.toFixed(1);
+    const move = e => {
+      const r = svg.getBoundingClientRect(), sx = (e.clientX - r.left) * W / r.width;
+      const i = Math.max(0, Math.min(li, Math.round((sx - m.l) / iw * li)));
+      const px = x(i);
+      hov.setAttribute("visibility", "visible");
+      const hl = hov.querySelector("#hl"); hl.setAttribute("x1", px); hl.setAttribute("x2", px);
+      hov.querySelectorAll("circle").forEach(c => { const v = S[+c.dataset.j][i]; c.setAttribute("visibility", v == null ? "hidden" : "visible"); if (v != null) { c.setAttribute("cx", px); c.setAttribute("cy", y(v)); } });
+      tip.hidden = false;
+      tip.innerHTML = `<b>${mLabel(M[i], true)}</b>` + AREAS.map((a, j) => ({ a, v: S[j][i] })).sort((p, q) => (q.v ?? -1) - (p.v ?? -1))
+        .map(({ a, v }) => `<div><span style="--c:${a.color}">${a.short || a.name}</span>${fmtV(v)}</div>`).join("");
+      const k = r.width / W, tw = tip.offsetWidth, left = px * k;
+      tip.style.left = (left + 14 + tw > r.width ? left - 14 - tw : left + 14) + "px";
+      tip.style.top = (m.t * k) + "px";
+    };
+    const leave = () => { hov.setAttribute("visibility", "hidden"); tip.hidden = true; };
+    svg.addEventListener("pointermove", move); svg.addEventListener("pointerdown", move); svg.addEventListener("pointerleave", leave);
+  }
+})();
+</script>
+</body>
+</html>
