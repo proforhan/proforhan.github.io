@@ -204,7 +204,7 @@
       aria-label="Latest monthly change: July 2026, negative 2.64 percent"
     >
       <span class="tracker-result-label">Latest monthly change</span>
-      <strong id="walmart-latest-change">July: −2.6%</strong>
+      <strong id="walmart-latest-change">Aug 2026: +2.7%</strong>
       <span id="walmart-latest-index" class="tracker-result-detail">
         Walmart basket index: 98.75
       </span>
@@ -306,8 +306,8 @@
     <h3>North Texas Home Values</h3>
     <div class="tracker-result" role="group" aria-label="Latest Zillow release">
       <span class="tracker-result-label">Latest Zillow release</span>
-      <strong id="hp-month">August 2026</strong>
-      <span class="tracker-result-detail" id="hp-detail">Frisco $638,512 · U.S. $368,697</span>
+      <strong id="hp-month">Aug 2026</strong>
+      <span class="tracker-result-detail" id="hp-detail">Dallas $305,765 · U.S. $368,697</span>
     </div>
     <p>
       Typical home values in Dallas, Plano and Frisco compared with the U.S., from the
@@ -345,9 +345,9 @@
     const n = Math.min(...S.map(s => s.length));
     if (n < 2) return;
     const [ly, lm] = D.latest_month.split("-");
-    document.getElementById("hp-month").textContent = MONTHS[lm - 1] + " " + ly;
+    document.getElementById("hp-month").textContent = MONTHS[lm - 1].slice(0, 3) + " " + ly;
     const last = k => { const s = D.series[k]; return s[s.length - 1][1]; };
-    document.getElementById("hp-detail").textContent = `Frisco ${usd(last("Frisco"))} · U.S. ${usd(last("United States"))}`;
+    document.getElementById("hp-detail").textContent = `Dallas ${usd(last("Dallas"))} · U.S. ${usd(last("United States"))}`;
 
     const W = Math.max(300, box.clientWidth), narrow = W < 520, H = narrow ? 240 : 300;
     const m = { l: 44, r: narrow ? 58 : 110, t: 10, b: 24 }, iw = W - m.l - m.r, ih = H - m.t - m.b;
@@ -511,6 +511,6 @@
 <footer class="site-footer">
 <p>© <span id="year"></span> Orhan Erdem · Built with plain HTML · No advertising or behavioral tracking.</p>
 </footer>
-<script src="script.js?v=20260726-6"></script>
+<script src="script.js?v=20260924-1"></script>
 </body>
 </html>
