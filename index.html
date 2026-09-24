@@ -76,17 +76,23 @@
 </script>
 <style>
   /* Housing data preview card (Projects section) */
-  .hp-list { display: grid; gap: .15rem; }
-  .hp-row { display: grid; grid-template-columns: 5.5rem 1fr auto 4.2rem; align-items: center; gap: 1rem; padding: .8rem .25rem; border-bottom: 1px solid var(--rule); font-variant-numeric: tabular-nums; }
-  .hp-name { font-weight: 650; display: inline-flex; align-items: center; gap: .5rem; }
-  .hp-name::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--c); flex: none; }
-  .hp-spark { color: var(--c); height: 28px; }
-  .hp-spark svg { width: 100%; height: 28px; display: block; }
-  .hp-val { font-family: var(--serif); font-size: 1.25rem; font-weight: 700; text-align: right; }
-  .hp-chg { font-size: .9rem; font-weight: 600; text-align: right; color: var(--ink-soft); }
-  .hp-chg.up { color: #1f7a4d; } .hp-chg.down { color: #b4442f; }
-  .hp-foot { font-size: .8rem; color: var(--ink-soft); margin: .6rem .25rem 0; }
-  @media (max-width: 480px) { .hp-row { grid-template-columns: 1fr auto 3.8rem; gap: .6rem; } .hp-spark, .hp-spark-note { display: none; } .hp-val { font-size: 1.1rem; } }
+  .hp-figure { margin: 0; border: 1px solid var(--rule); border-radius: 12px; padding: 1rem 1rem .75rem; position: relative; }
+  .hp-chart-head strong { display: block; font-size: .98rem; }
+  .hp-chart-head span { font-size: .75rem; color: var(--ink-soft); }
+  #hp-chart { position: relative; margin-top: .5rem; }
+  #hp-chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  #hp-chart text { font: 500 11px var(--sans); fill: #687383; }
+  #hp-chart text.hp-end { font-weight: 700; font-size: 12.5px; fill: currentColor; }
+  #hp-chart text.hp-endv { font-family: var(--serif); font-weight: 700; font-size: 13px; fill: var(--ink); }
+  .hp-legend { display: flex; flex-wrap: wrap; gap: .3rem 1rem; font-size: .78rem; color: var(--ink-soft); margin-top: .4rem; }
+  .hp-legend span { display: inline-flex; align-items: center; gap: .35rem; }
+  .hp-legend i { width: 16px; height: 3px; border-radius: 2px; background: var(--c); }
+  .hp-legend i.dash { background: repeating-linear-gradient(90deg, var(--c) 0 5px, transparent 5px 8px); }
+  .hp-figure figcaption { font-size: .8rem; color: var(--ink-soft); margin-top: .5rem; }
+  .hp-tip { position: absolute; pointer-events: none; background: var(--ink); color: #fff; font-size: .78rem; padding: .45rem .6rem; border-radius: 7px; min-width: 150px; box-shadow: 0 8px 20px rgba(28,34,48,.2); }
+  .hp-tip b { display: block; margin-bottom: .15rem; }
+  .hp-tip div { display: flex; justify-content: space-between; gap: .8rem; font-variant-numeric: tabular-nums; }
+  .hp-tip span::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--c); margin-right: .35rem; }
 </style>
 </head>
 <body>
@@ -298,45 +304,96 @@
   <div class="tracker-copy">
     <p class="eyebrow">Data project</p>
     <h3>North Texas Home Values</h3>
-    <div class="tracker-result" role="group" aria-label="Typical home value in Frisco">
+    <div class="tracker-result" role="group" aria-label="Latest Zillow release">
       <span class="tracker-result-label">Latest Zillow release</span>
       <strong id="hp-month">August 2026</strong>
-      <span class="tracker-result-detail">Updated automatically each month</span>
+      <span class="tracker-result-detail" id="hp-detail">Frisco $638,512 · U.S. $368,697</span>
     </div>
     <p>
       Typical home values in Dallas, Plano and Frisco compared with the U.S., from the
-      Zillow Home Value Index, with monthly, yearly and long-run changes.
+      Zillow Home Value Index. Updated automatically each month.
     </p>
     <a class="btn btn-primary" href="data.html">See the full data →</a>
   </div>
-  <div class="hp-list" id="hp-list" aria-label="Typical home value and change over the past year">
-    <div class="hp-row" style="--c:#f0603f"><span class="hp-name">Frisco</span><span class="hp-spark"></span><span class="hp-val">$638,512</span><span class="hp-chg down">−4.1%</span></div>
-    <div class="hp-row" style="--c:#6d5ae0"><span class="hp-name">Plano</span><span class="hp-spark"></span><span class="hp-val">$493,092</span><span class="hp-chg down">−3.8%</span></div>
-    <div class="hp-row" style="--c:#0e7c72"><span class="hp-name">Dallas</span><span class="hp-spark"></span><span class="hp-val">$305,765</span><span class="hp-chg down">−1.7%</span></div>
-    <div class="hp-row" style="--c:#55606f"><span class="hp-name">U.S.</span><span class="hp-spark"></span><span class="hp-val">$368,697</span><span class="hp-chg up">+1.2%</span></div>
-    <p class="hp-foot">Typical home value and change over the past year<span class="hp-spark-note"> · lines show the last 5 years</span></p>
-  </div>
+  <figure class="data-card tracker-static-chart hp-figure">
+    <div class="hp-chart-head">
+      <div><strong>Typical home value</strong><span id="hp-sub">Last 5 years · Zillow Home Value Index</span></div>
+    </div>
+    <div id="hp-chart"></div>
+    <div class="hp-legend" id="hp-legend"></div>
+    <figcaption id="hp-caption">Frisco, Plano and Dallas city values compared with the U.S. national index.</figcaption>
+  </figure>
 </article>
 <script>
 (() => {
-  const NAMES = { "Frisco": "Frisco", "Plano": "Plano", "Dallas": "Dallas", "U.S.": "United States" };
+  const FALLBACK = {"latest_month":"2026-08","series":{"Dallas":[["2021-08",276012],["2021-09",276256],["2021-10",277097],["2021-11",279193],["2021-12",282122],["2022-01",287927],["2022-02",295782],["2022-03",305024],["2022-04",313360],["2022-05",320346],["2022-06",325874],["2022-07",328844],["2022-08",329310],["2022-09",328313],["2022-10",327414],["2022-11",326692],["2022-12",325519],["2023-01",323733],["2023-02",322013],["2023-03",321321],["2023-04",321231],["2023-05",321828],["2023-06",322569],["2023-07",323427],["2023-08",324604],["2023-09",325394],["2023-10",326004],["2023-11",326007],["2023-12",325583],["2024-01",325778],["2024-02",326816],["2024-03",328858],["2024-04",330272],["2024-05",330406],["2024-06",329409],["2024-07",327933],["2024-08",326585],["2024-09",325664],["2024-10",325086],["2024-11",324416],["2024-12",323852],["2025-01",323365],["2025-02",323060],["2025-03",321840],["2025-04",319682],["2025-05",316971],["2025-06",314341],["2025-07",312258],["2025-08",310919],["2025-09",310320],["2025-10",310186],["2025-11",310336],["2025-12",310576],["2026-01",310814],["2026-02",310825],["2026-03",310202],["2026-04",308884],["2026-05",307210],["2026-06",305996],["2026-07",305559],["2026-08",305765]],"Plano":[["2021-08",425877],["2021-09",429717],["2021-10",433836],["2021-11",439127],["2021-12",445805],["2022-01",456225],["2022-02",469481],["2022-03",484563],["2022-04",499737],["2022-05",513465],["2022-06",524924],["2022-07",529565],["2022-08",528298],["2022-09",523515],["2022-10",519436],["2022-11",516543],["2022-12",515008],["2023-01",513971],["2023-02",513392],["2023-03",513784],["2023-04",515311],["2023-05",518948],["2023-06",523092],["2023-07",526916],["2023-08",529801],["2023-09",531784],["2023-10",532515],["2023-11",532663],["2023-12",532071],["2024-01",532354],["2024-02",534210],["2024-03",537613],["2024-04",541374],["2024-05",542565],["2024-06",541691],["2024-07",539622],["2024-08",537711],["2024-09",536740],["2024-10",536421],["2024-11",536212],["2024-12",535262],["2025-01",533779],["2025-02",532081],["2025-03",529726],["2025-04",527091],["2025-05",523735],["2025-06",519730],["2025-07",515592],["2025-08",512741],["2025-09",511752],["2025-10",510979],["2025-11",509800],["2025-12",508397],["2026-01",506673],["2026-02",504952],["2026-03",501748],["2026-04",498339],["2026-05",494873],["2026-06",493226],["2026-07",492759],["2026-08",493092]],"Frisco":[["2021-08",541936],["2021-09",550272],["2021-10",558535],["2021-11",567954],["2021-12",579134],["2022-01",595055],["2022-02",615651],["2022-03",638974],["2022-04",663164],["2022-05",684669],["2022-06",701883],["2022-07",707498],["2022-08",702689],["2022-09",691863],["2022-10",682208],["2022-11",675352],["2022-12",670698],["2023-01",665359],["2023-02",661351],["2023-03",658860],["2023-04",660187],["2023-05",664640],["2023-06",670899],["2023-07",676660],["2023-08",680848],["2023-09",683557],["2023-10",683674],["2023-11",683312],["2023-12",682509],["2024-01",683908],["2024-02",686008],["2024-03",689590],["2024-04",693761],["2024-05",696157],["2024-06",696030],["2024-07",694387],["2024-08",693070],["2024-09",693382],["2024-10",694429],["2024-11",695639],["2024-12",695361],["2025-01",694009],["2025-02",691464],["2025-03",688290],["2025-04",684918],["2025-05",680691],["2025-06",675293],["2025-07",669878],["2025-08",666109],["2025-09",664832],["2025-10",664434],["2025-11",663662],["2025-12",662448],["2026-01",659988],["2026-02",657083],["2026-03",653112],["2026-04",649159],["2026-05",644815],["2026-06",641482],["2026-07",639326],["2026-08",638512]],"United States":[["2021-08",306368],["2021-09",308365],["2021-10",310322],["2021-11",312975],["2021-12",316245],["2022-01",320744],["2022-02",326132],["2022-03",332467],["2022-04",338799],["2022-05",344457],["2022-06",349186],["2022-07",351671],["2022-08",352050],["2022-09",350758],["2022-10",349516],["2022-11",348496],["2022-12",347570],["2023-01",346356],["2023-02",345469],["2023-03",345406],["2023-04",346390],["2023-05",348047],["2023-06",350023],["2023-07",351805],["2023-08",353459],["2023-09",354708],["2023-10",355643],["2023-11",356306],["2023-12",356745],["2024-01",357183],["2024-02",357984],["2024-03",359543],["2024-04",361420],["2024-05",362870],["2024-06",363438],["2024-07",363588],["2024-08",363834],["2024-09",364290],["2024-10",364885],["2024-11",365384],["2024-12",366112],["2025-01",366748],["2025-02",367213],["2025-03",366935],["2025-04",366401],["2025-05",365709],["2025-06",365085],["2025-07",364654],["2025-08",364424],["2025-09",364668],["2025-10",365107],["2025-11",365790],["2025-12",366588],["2026-01",367350],["2026-02",368072],["2026-03",368567],["2026-04",368647],["2026-05",368385],["2026-06",368142],["2026-07",368250],["2026-08",368697]]}};
+  const AREAS = [
+    { key: "Frisco", label: "Frisco", color: "#f0603f" },
+    { key: "Plano", label: "Plano", color: "#6d5ae0" },
+    { key: "United States", label: "U.S.", color: "#55606f", dash: true },
+    { key: "Dallas", label: "Dallas", color: "#0e7c72" },
+  ];
   const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-  fetch("data/zhvi.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : Promise.reject()).then(d => {
-    const [y, m] = d.latest_month.split("-");
-    document.getElementById("hp-month").textContent = MONTHS[m - 1] + " " + y;
-    document.querySelectorAll("#hp-list .hp-row").forEach(row => {
-      const s = d.series[NAMES[row.querySelector(".hp-name").textContent]];
-      if (!s || s.length < 61) return;
-      const v = s[s.length - 1][1], yoy = (v / s[s.length - 13][1] - 1) * 100, r1 = +yoy.toFixed(1);
-      row.querySelector(".hp-val").textContent = "$" + v.toLocaleString("en-US");
-      const c = row.querySelector(".hp-chg");
-      c.textContent = (r1 > 0 ? "+" : r1 < 0 ? "−" : "") + Math.abs(r1).toFixed(1) + "%";
-      c.className = "hp-chg " + (r1 > 0 ? "up" : r1 < 0 ? "down" : "");
-      const pts = s.slice(-61).map(p => p[1]), lo = Math.min(...pts), hi = Math.max(...pts);
-      const W = 120, H = 28, path = pts.map((p, i) => (i ? "L" : "M") + (i / (pts.length - 1) * W).toFixed(1) + "," + (2 + (1 - (p - lo) / (hi - lo || 1)) * (H - 4)).toFixed(1)).join("");
-      row.querySelector(".hp-spark").innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><path d="${path}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>`;
-    });
-  }).catch(() => {});
+  const usd = v => "$" + Math.round(v).toLocaleString("en-US");
+  const usdK = v => "$" + Math.round(v / 1000) + "K";
+  let D = FALLBACK;
+
+  function render() {
+    const box = document.getElementById("hp-chart");
+    if (!box) return;
+    const S = AREAS.map(a => (D.series[a.key] || []).slice(-61));
+    const n = Math.min(...S.map(s => s.length));
+    if (n < 2) return;
+    const [ly, lm] = D.latest_month.split("-");
+    document.getElementById("hp-month").textContent = MONTHS[lm - 1] + " " + ly;
+    const last = k => { const s = D.series[k]; return s[s.length - 1][1]; };
+    document.getElementById("hp-detail").textContent = `Frisco ${usd(last("Frisco"))} · U.S. ${usd(last("United States"))}`;
+
+    const W = Math.max(300, box.clientWidth), narrow = W < 520, H = narrow ? 240 : 300;
+    const m = { l: 44, r: narrow ? 58 : 110, t: 10, b: 24 }, iw = W - m.l - m.r, ih = H - m.t - m.b;
+    const vals = S.flatMap(s => s.slice(-n).map(p => p[1]));
+    const step = 100000;
+    const lo = Math.floor(Math.min(...vals) / step) * step, hi = Math.ceil(Math.max(...vals) / step) * step;
+    const x = i => m.l + i / (n - 1) * iw, y = v => m.t + (1 - (v - lo) / (hi - lo)) * ih;
+    const months = S[0].slice(-n).map(p => p[0]);
+    let g = "";
+    for (let v = lo; v <= hi; v += step) g += `<line x1="${m.l}" x2="${m.l + iw}" y1="${y(v)}" y2="${y(v)}" stroke="#ece5d8"/><text x="${m.l - 7}" y="${y(v) + 4}" text-anchor="end">${usdK(v)}</text>`;
+    months.forEach((k, i) => { if (k.endsWith("-01")) g += `<text x="${x(i)}" y="${H - 6}" text-anchor="middle">${k.slice(0, 4)}</text>`; });
+    // End labels, nudged apart so they never overlap
+    const ends = AREAS.map((a, j) => ({ a, v: S[j][S[j].length - 1][1] })).sort((p, q) => q.v - p.v);
+    let prevY = -1e9; ends.forEach(e => { e.ly = Math.max(y(e.v), prevY + (narrow ? 26 : 30)); prevY = e.ly; });
+    const lines = AREAS.map((a, j) => {
+      const d = S[j].slice(-n).map((p, i) => (i ? "L" : "M") + x(i).toFixed(1) + "," + y(p[1]).toFixed(1)).join("");
+      return `<path d="${d}" fill="none" stroke="${a.color}" stroke-width="${a.dash ? 2 : 2.6}" ${a.dash ? 'stroke-dasharray="6 4"' : ""} stroke-linejoin="round"/>`;
+    }).join("");
+    const labels = ends.map(e => `<circle cx="${x(n - 1)}" cy="${y(e.v)}" r="4" fill="${e.a.color}" stroke="#fff" stroke-width="2"/>
+      <text class="hp-end" x="${x(n - 1) + 9}" y="${e.ly - (narrow ? 2 : 3)}" fill="${e.a.color}">${e.a.label}</text>
+      <text class="hp-endv" x="${x(n - 1) + 9}" y="${e.ly + (narrow ? 10 : 12)}">${narrow ? usdK(e.v) : usd(e.v)}</text>`).join("");
+    box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Line chart of typical home values over the last five years in Frisco, Plano, Dallas and the United States">${g}${lines}${labels}
+      <g id="hp-hov" visibility="hidden"><line id="hp-hl" y1="${m.t}" y2="${m.t + ih}" stroke="#9aa3ad" stroke-dasharray="3 3"/></g></svg><div class="hp-tip" hidden></div>`;
+    document.getElementById("hp-legend").innerHTML = AREAS.map(a => `<span style="--c:${a.color}"><i class="${a.dash ? "dash" : ""}"></i>${a.key}</span>`).join("");
+
+    const svg = box.querySelector("svg"), hov = svg.querySelector("#hp-hov"), hl = svg.querySelector("#hp-hl"), tip = box.querySelector(".hp-tip");
+    const move = e => {
+      const r = svg.getBoundingClientRect(), sx = (e.clientX - r.left) * W / r.width;
+      const i = Math.max(0, Math.min(n - 1, Math.round((sx - m.l) / iw * (n - 1))));
+      hov.setAttribute("visibility", "visible"); hl.setAttribute("x1", x(i)); hl.setAttribute("x2", x(i));
+      const [yy, mm] = months[i].split("-");
+      tip.innerHTML = `<b>${MONTHS[mm - 1]} ${yy}</b>` + AREAS.map((a, j) => ({ a, v: S[j].slice(-n)[i][1] })).sort((p, q) => q.v - p.v)
+        .map(({ a, v }) => `<div><span style="--c:${a.color}">${a.label}</span>${usd(v)}</div>`).join("");
+      tip.hidden = false;
+      const k = r.width / W, tw = tip.offsetWidth, px = x(i) * k;
+      tip.style.left = (px + 12 + tw > r.width ? px - 12 - tw : px + 12) + "px"; tip.style.top = "4px";
+    };
+    svg.addEventListener("pointermove", move); svg.addEventListener("pointerdown", move);
+    svg.addEventListener("pointerleave", () => { hov.setAttribute("visibility", "hidden"); tip.hidden = true; });
+  }
+
+  render();
+  let t; addEventListener("resize", () => { clearTimeout(t); t = setTimeout(render, 150); });
+  // Newer figures from the monthly updater replace the built-in snapshot
+  fetch("data/zhvi.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : Promise.reject())
+    .then(d => { if (d.latest_month >= D.latest_month) { D = d; render(); } }).catch(() => {});
 })();
 </script>
 
