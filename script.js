@@ -541,7 +541,7 @@ function updateWalmartSummary(rows, isLive) {
   const status = document.getElementById("walmart-sync-status");
 
   if (change) {
-    change.textContent = `${walmartShortMonth(latest.label)}: ${formatWalmartPercent(latest.mom)}`;
+        change.textContent = `${walmartShortMonth(latest.label)} ${(String(latest.label).match(/\d{4}/) || [""])[0]}: ${formatWalmartPercent(latest.mom)}`;
   }
   if (index) {
     index.textContent = `Walmart basket index: ${latest.walmart.toFixed(2)}`;
