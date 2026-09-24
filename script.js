@@ -113,13 +113,7 @@ const FEATURED_PROJECTS = [
     tag: "Interactive economics game",
     variant: "game"
   },
-  {
-    title: "LLM Portfolio Battle",
-    description: "Four AI models manage competing portfolios in a weekly comparison against the S&P 500.",
-    url: "https://manasareddy2417.github.io/LLM-performance-tracker/",
-    meta: "View the live project ↗",
-    icon: ICON_STOCKS
-  },
+
   {
     title: "Datarium / StockPik",
     description: "Datarium is an AI consulting studio bridging artificial intelligence, finance, and economics. StockPik, its flagship app, uses AI to help everyday investors research and evaluate stocks.",
